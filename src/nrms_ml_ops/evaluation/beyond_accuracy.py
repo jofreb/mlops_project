@@ -4,7 +4,7 @@ from sklearn.metrics.pairwise import cosine_distances
 from itertools import combinations, chain
 import numpy as np
 
-from ebrec.evaluation.metrics._beyond_accuracy import (
+from evaluation.metrics._beyond_accuracy import (
     intralist_diversity,
     coverage_fraction,
     coverage_count,
@@ -12,7 +12,7 @@ from ebrec.evaluation.metrics._beyond_accuracy import (
     novelty,
 )
 
-from ebrec.evaluation.utils import (
+from evaluation.utils import (
     compute_normalized_distribution,
     check_key_in_all_nested_dicts,
     is_iterable_nested_dtype,
