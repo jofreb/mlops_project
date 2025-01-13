@@ -6,6 +6,9 @@ manual_test/
 # other local dev info
 .vscode/
 
+# Everything inside data
+data/processed/*
+
 # Mac OS-specific storage files
 .DS_Store
 
