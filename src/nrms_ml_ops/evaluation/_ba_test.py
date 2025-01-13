@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_distances
 
-from ebrec.evaluation.beyond_accuracy import (
+from evaluation.beyond_accuracy import (
     IntralistDiversity,
     Distribution,
     Serendipity,
