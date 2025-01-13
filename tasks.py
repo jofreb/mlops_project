@@ -3,7 +3,7 @@ import os
 from invoke import Context, task
 
 WINDOWS = os.name == "nt"
-PROJECT_NAME = "my_project"
+PROJECT_NAME = "nrms_ml_ops"
 PYTHON_VERSION = "3.11.11"
 
 # Setup commands
