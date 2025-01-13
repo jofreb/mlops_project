@@ -49,34 +49,6 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
 
-def ebnerd_from_path(path: Path, history_size: int = 30) -> pl.DataFrame:
-    """
-    Load ebnerd - function
-    """
-    df_history = (
-        pl.scan_parquet(path.joinpath("history.parquet"))
-        .select(DEFAULT_USER_COL, DEFAULT_HISTORY_ARTICLE_ID_COL)
-        .pipe(
-            truncate_history,
-            column=DEFAULT_HISTORY_ARTICLE_ID_COL,
-            history_size=history_size,
-            padding_value=0,
-            enable_warning=False,
-        )
-    )
-    df_behaviors = (
-        pl.scan_parquet(path.joinpath("behaviors.parquet"))
-        .collect()
-        .pipe(
-            slice_join_dataframes,
-            df2=df_history.collect(),
-            on=DEFAULT_USER_COL,
-            how="left",
-        )
-    )
-    return df_behaviors
-
-
 PATH = Path("./data/processed").expanduser()
 DUMP_DIR = PATH.joinpath("ebnerd_predictions")
 DUMP_DIR.mkdir(exist_ok=True, parents=True)
@@ -109,50 +81,11 @@ COLUMNS = [
     DEFAULT_IMPRESSION_ID_COL,
 ]
 
-df_train = (
-    ebnerd_from_path(PATH.joinpath("train"), history_size=HISTORY_SIZE)
-    .sample(fraction=1)
-    .select(COLUMNS)
-    .pipe(
-        sampling_strategy_wu2019,
-        npratio=4,
-        shuffle=True,
-        with_replacement=True,
-        seed=123,
-    )
-    .pipe(create_binary_labels_column)
-)
+df_train = pl.read_parquet(PATH.joinpath("train.parquet"))
 
 
-df_validation= (
-    ebnerd_from_path(PATH.joinpath("validation"), history_size=HISTORY_SIZE)
-    .sample(fraction=1)
-    .select(COLUMNS)
-    .pipe(
-        sampling_strategy_wu2019,
-        npratio=4,
-        shuffle=True,
-        with_replacement=True,
-        seed=123,
-    )
-    .pipe(create_binary_labels_column)
-)
+df_validation= pl.read_parquet(PATH.joinpath("validation.parquet"))
 
-
-df_test = (
-    ebnerd_from_path(PATH.joinpath("test"), history_size=HISTORY_SIZE)
-    .with_columns(
-        pl.col(DEFAULT_INVIEW_ARTICLES_COL)
-        .list.first()
-        .alias(DEFAULT_CLICKED_ARTICLES_COL)
-    )
-    .select(COLUMNS)
-    .with_columns(
-        pl.col(DEFAULT_INVIEW_ARTICLES_COL)
-        .list.eval(pl.element() * 0)
-        .alias(DEFAULT_LABELS_COL)
-    )
-)
 
 
 df_articles = pl.read_parquet(PATH.joinpath("articles.parquet"))

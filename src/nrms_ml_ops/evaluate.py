@@ -62,7 +62,7 @@ embedding = 'xlm_roberta_base'
 BATCH_SIZE = 32
 learning_rate = 1e-4
 HISTORY_SIZE =  35
-MODEL_NAME = "NRMS-2025-01-13 13:06:05.428179"
+MODEL_NAME = "NRMS-2025-01-13 15:54:33.945585"
 MODEL_WEIGHTS = f"./models/{MODEL_NAME}"
 Path(MODEL_WEIGHTS).mkdir(parents=True, exist_ok=True)
 LOG_DIR = DUMP_DIR.joinpath(f"./runs/{MODEL_NAME}")
