@@ -4,7 +4,7 @@ from invoke import Context, task
 
 WINDOWS = os.name == "nt"
 PROJECT_NAME = "nrms_ml_ops"
-PYTHON_VERSION = "3.9.6"
+PYTHON_VERSION = "3.11.11"
 
 # Setup commands
 @task
@@ -38,7 +38,9 @@ def preprocess_data(ctx: Context) -> None:
 @task
 def train(ctx: Context) -> None:
     """Train model."""
-    ctx.run(f"python src/{PROJECT_NAME}/train.py", echo=True, pty=not WINDOWS)
+    # ctx.run(f"python src/{PROJECT_NAME}/train.py", echo=True, pty=not WINDOWS)
+    python_path = ".venv/bin/python" if not WINDOWS else ".venv\\Scripts\\python"
+    ctx.run(f"{python_path} src/{PROJECT_NAME}/train.py", echo=True, pty=not WINDOWS)
 
 @task
 def test(ctx: Context) -> None:
