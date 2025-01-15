@@ -8,9 +8,7 @@ except ImportError:
     print("transformers not available")
 
 
-def load_article_id_embeddings(
-    df: pl.DataFrame, path: str, item_col: str = DEFAULT_ARTICLE_ID_COL
-) -> pl.DataFrame:
+def load_article_id_embeddings(df: pl.DataFrame, path: str, item_col: str = DEFAULT_ARTICLE_ID_COL) -> pl.DataFrame:
     """Load embeddings artifacts and join to articles on 'article_id'
     Args:
         path (str): Path to document embeddings
@@ -23,9 +21,7 @@ def create_article_id_to_value_mapping(
     value_col: str,
     article_col: str = DEFAULT_ARTICLE_ID_COL,
 ):
-    return create_lookup_dict(
-        df.select(article_col, value_col), key=article_col, value=value_col
-    )
+    return create_lookup_dict(df.select(article_col, value_col), key=article_col, value=value_col)
 
 
 def convert_text2encoding_with_transformers(
@@ -121,11 +117,7 @@ def create_sort_based_prediction_score(
     """
     _TEMP_NAME = "index"
     return (
-        (
-            df.select(article_id_col, column)
-            .sort(by=column, descending=desc)
-            .with_row_index(name=_TEMP_NAME, offset=1)
-        )
+        (df.select(article_id_col, column).sort(by=column, descending=desc).with_row_index(name=_TEMP_NAME, offset=1))
         .with_columns((1 / pl.col(_TEMP_NAME)).alias(prediction_score_col))
         .drop(_TEMP_NAME)
     )

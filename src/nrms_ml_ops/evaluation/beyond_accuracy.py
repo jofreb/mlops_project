@@ -85,9 +85,7 @@ class IntralistDiversity:
             if len(ids) == 0:
                 divesity_score = np.nan
             else:
-                document_vectors = np.array(
-                    [lookup_dict[id].get(lookup_key) for id in ids]
-                )
+                document_vectors = np.array([lookup_dict[id].get(lookup_key) for id in ids])
                 divesity_score = intralist_diversity(
                     document_vectors,
                     pairwise_distance_function=pairwise_distance_function,
@@ -139,8 +137,7 @@ class IntralistDiversity:
         if n_combinations > max_number_combinations:
             np.random.seed(seed)
             aids_iterable = chain(
-                np.random.choice(R, n_recommendations, replace=False)
-                for _ in range(max_number_combinations)
+                np.random.choice(R, n_recommendations, replace=False) for _ in range(max_number_combinations)
             )
         else:
             aids_iterable = combinations(R, n_recommendations)
@@ -296,9 +293,7 @@ class Sentiment:
         sentiment_scores = []
         for sample in R:
             ids = get_keys_in_dict(sample, lookup_dict)
-            sentiment_scores.append(
-                np.mean([lookup_dict[id].get(lookup_key) for id in ids])
-            )
+            sentiment_scores.append(np.mean([lookup_dict[id].get(lookup_key) for id in ids]))
         return np.asarray(sentiment_scores)
 
     def _candidate_sentiment(
@@ -403,9 +398,7 @@ class Serendipity:
         """
         # Sanity:
         if len(R) != len(H):
-            raise ValueError(
-                f"The lengths of 'R' and 'H' do not match ({len(R)} != {len(H)})."
-            )
+            raise ValueError(f"The lengths of 'R' and 'H' do not match ({len(R)} != {len(H)}).")
         check_key_in_all_nested_dicts(lookup_dict, lookup_key)
         # =>
         serendipity_scores = []
@@ -420,9 +413,7 @@ class Serendipity:
             if len(r_i_vectors) == 0 or len(ch_i_vectors) == 0:
                 serendipity_score = np.nan
             else:
-                serendipity_score = serendipity(
-                    r_i_vectors, ch_i_vectors, pairwise_distance_function
-                )
+                serendipity_score = serendipity(r_i_vectors, ch_i_vectors, pairwise_distance_function)
             serendipity_scores.append(serendipity_score)
         return np.asarray(serendipity_scores)
 
