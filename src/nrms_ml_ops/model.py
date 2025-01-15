@@ -21,22 +21,19 @@ class NRMSModel_docvec:
         hparams: dict,
         seed: int = None,
         newsencoder_units_per_layer: list[int] = [512, 512, 512],
-
     ):
         """Initialization steps for NRMS."""
         self.hparams = hparams
         self.seed = seed
         self.newsencoder_units_per_layer = newsencoder_units_per_layer
-        
+
         # SET SEED:
         tf.random.set_seed(seed)
         np.random.seed(seed)
         # BUILD AND COMPILE MODEL:
         self.model, self.scorer = self._build_graph()
         data_loss = self._get_loss(self.hparams.loss)
-        train_optimizer = self._get_opt(
-            optimizer=self.hparams.optimizer, lr=self.hparams.learning_rate
-        )
+        train_optimizer = self._get_opt(optimizer=self.hparams.optimizer, lr=self.hparams.learning_rate)
         self.model.compile(loss=data_loss, optimizer=train_optimizer)
 
     def _get_loss(self, loss: str):
@@ -82,16 +79,10 @@ class NRMSModel_docvec:
         Return:
             object: the user encoder of NRMS.
         """
-        his_input_title = tf.keras.Input(
-            shape=(self.hparams.history_size, self.hparams.title_size), dtype="float32"
-        )
+        his_input_title = tf.keras.Input(shape=(self.hparams.history_size, self.hparams.title_size), dtype="float32")
 
-        click_title_presents = tf.keras.layers.TimeDistributed(titleencoder)(
-            his_input_title
-        )
-        y = SelfAttention(self.hparams.head_num, self.hparams.head_dim, seed=self.seed)(
-            [click_title_presents] * 3
-        )
+        click_title_presents = tf.keras.layers.TimeDistributed(titleencoder)(his_input_title)
+        y = SelfAttention(self.hparams.head_num, self.hparams.head_dim, seed=self.seed)([click_title_presents] * 3)
         user_present = AttLayer2(self.hparams.attention_hidden_dim, seed=self.seed)(y)
 
         model = tf.keras.Model(his_input_title, user_present, name="user_encoder")
@@ -111,9 +102,7 @@ class NRMSModel_docvec:
         OUTPUT_DIM = self.hparams.head_num * self.hparams.head_dim
 
         # DENSE LAYERS (FINE-TUNED):
-        sequences_input_title = tf.keras.Input(
-            shape=(DOCUMENT_VECTOR_DIM,), dtype="float32"
-        )
+        sequences_input_title = tf.keras.Input(shape=(DOCUMENT_VECTOR_DIM,), dtype="float32")
         x = sequences_input_title
         # Create configurable Dense layers:
         for layer in units_per_layer:
@@ -125,9 +114,7 @@ class NRMSModel_docvec:
         pred_title = tf.keras.layers.Dense(units=OUTPUT_DIM, activation="relu")(x)
 
         # Construct the final model
-        model = tf.keras.Model(
-            inputs=sequences_input_title, outputs=pred_title, name="news_encoder"
-        )
+        model = tf.keras.Model(inputs=sequences_input_title, outputs=pred_title, name="news_encoder")
 
         return model
 
@@ -156,19 +143,13 @@ class NRMSModel_docvec:
             ),
             dtype="float32",
         )
-        pred_title_one_reshape = tf.keras.layers.Reshape((self.hparams.title_size,))(
-            pred_input_title_one
-        )
-        titleencoder = self._build_newsencoder(
-            units_per_layer=self.newsencoder_units_per_layer
-        )
+        pred_title_one_reshape = tf.keras.layers.Reshape((self.hparams.title_size,))(pred_input_title_one)
+        titleencoder = self._build_newsencoder(units_per_layer=self.newsencoder_units_per_layer)
         self.userencoder = self._build_userencoder(titleencoder)
         self.newsencoder = titleencoder
 
         user_present = self.userencoder(his_input_title)
-        news_present = tf.keras.layers.TimeDistributed(self.newsencoder)(
-            pred_input_title
-        )
+        news_present = tf.keras.layers.TimeDistributed(self.newsencoder)(pred_input_title)
         news_present_one = self.newsencoder(pred_title_one_reshape)
 
         preds = tf.keras.layers.Dot(axes=-1)([news_present, user_present])

@@ -52,9 +52,7 @@ class NewsrecDataLoader(tf.keras.utils.Sequence):
         raise ValueError("Function '__getitem__' needs to be implemented.")
 
     def load_data(self) -> tuple[pl.DataFrame, pl.DataFrame]:
-        X = self.behaviors.drop(self.labels_col).with_columns(
-            pl.col(self.inview_col).list.len().alias("n_samples")
-        )
+        X = self.behaviors.drop(self.labels_col).with_columns(pl.col(self.inview_col).list.len().alias("n_samples"))
         y = self.behaviors[self.labels_col]
         return X, y
 
@@ -86,9 +84,7 @@ class NRMSDataLoader(NewsrecDataLoader):
         pred_input_title:   (samples, npratio, document_dimension)
         batch_y:            (samples, npratio)
         """
-        batch_X = self.X[idx * self.batch_size : (idx + 1) * self.batch_size].pipe(
-            self.transform
-        )
+        batch_X = self.X[idx * self.batch_size : (idx + 1) * self.batch_size].pipe(self.transform)
         batch_y = self.y[idx * self.batch_size : (idx + 1) * self.batch_size]
         # =>
         if self.eval_mode:
@@ -102,17 +98,11 @@ class NRMSDataLoader(NewsrecDataLoader):
                 repeats=repeats,
             )
             # =>
-            pred_input_title = self.lookup_article_matrix[
-                batch_X[self.inview_col].explode().to_list()
-            ]
+            pred_input_title = self.lookup_article_matrix[batch_X[self.inview_col].explode().to_list()]
         else:
             batch_y = np.array(batch_y.to_list())
-            his_input_title = self.lookup_article_matrix[
-                batch_X[self.history_column].to_list()
-            ]
-            pred_input_title = self.lookup_article_matrix[
-                batch_X[self.inview_col].to_list()
-            ]
+            his_input_title = self.lookup_article_matrix[batch_X[self.history_column].to_list()]
+            pred_input_title = self.lookup_article_matrix[batch_X[self.inview_col].to_list()]
             pred_input_title = np.squeeze(pred_input_title, axis=2)
 
         his_input_title = np.squeeze(his_input_title, axis=2)
@@ -163,17 +153,11 @@ class NRMSDataLoaderPretransform(NewsrecDataLoader):
                 repeats=repeats,
             )
             # =>
-            pred_input_title = self.lookup_article_matrix[
-                batch_X[self.inview_col].explode().to_list()
-            ]
+            pred_input_title = self.lookup_article_matrix[batch_X[self.inview_col].explode().to_list()]
         else:
             batch_y = np.array(batch_y.to_list())
-            his_input_title = self.lookup_article_matrix[
-                batch_X[self.history_column].to_list()
-            ]
-            pred_input_title = self.lookup_article_matrix[
-                batch_X[self.inview_col].to_list()
-            ]
+            his_input_title = self.lookup_article_matrix[batch_X[self.history_column].to_list()]
+            pred_input_title = self.lookup_article_matrix[batch_X[self.inview_col].to_list()]
             pred_input_title = np.squeeze(pred_input_title, axis=2)
 
         his_input_title = np.squeeze(his_input_title, axis=2)
@@ -205,11 +189,7 @@ class LSTURDataLoader(NewsrecDataLoader):
                 fill_nulls=self.unknown_index,
                 drop_nulls=False,
             )
-            .with_columns(
-                pl.col(self.user_col).replace(
-                    self.user_id_mapping, default=self.unknown_user_value
-                )
-            )
+            .with_columns(pl.col(self.user_col).replace(self.user_id_mapping, default=self.unknown_user_value))
         )
 
     def __getitem__(self, idx) -> tuple[tuple[np.ndarray], np.ndarray]:
@@ -219,9 +199,7 @@ class LSTURDataLoader(NewsrecDataLoader):
         pred_input_title:   (samples, npratio, document_dimension)
         batch_y:            (samples, npratio)
         """
-        batch_X = self.X[idx * self.batch_size : (idx + 1) * self.batch_size].pipe(
-            self.transform
-        )
+        batch_X = self.X[idx * self.batch_size : (idx + 1) * self.batch_size].pipe(self.transform)
         batch_y = self.y[idx * self.batch_size : (idx + 1) * self.batch_size]
         # =>
         if self.eval_mode:
@@ -230,9 +208,7 @@ class LSTURDataLoader(NewsrecDataLoader):
             batch_y = np.array(batch_y.explode().to_list()).reshape(-1, 1)
             # =>
             user_indexes = np.array(
-                batch_X.select(
-                    pl.col(self.user_col).repeat_by(pl.col("n_samples")).explode()
-                )[self.user_col].to_list()
+                batch_X.select(pl.col(self.user_col).repeat_by(pl.col("n_samples")).explode())[self.user_col].to_list()
             ).reshape(-1, 1)
             # =>
             his_input_title = repeat_by_list_values_from_matrix(
@@ -241,22 +217,16 @@ class LSTURDataLoader(NewsrecDataLoader):
                 repeats=repeats,
             )
             # =>
-            pred_input_title = self.lookup_article_matrix[
-                batch_X[self.inview_col].explode().to_list()
-            ]
+            pred_input_title = self.lookup_article_matrix[batch_X[self.inview_col].explode().to_list()]
         else:
             # =>
             batch_y = np.array(batch_y.to_list())
             # =>
             user_indexes = np.array(batch_X[self.user_col].to_list()).reshape(-1, 1)
             # =>
-            his_input_title = self.lookup_article_matrix[
-                batch_X[self.history_column].to_list()
-            ]
+            his_input_title = self.lookup_article_matrix[batch_X[self.history_column].to_list()]
             # =>
-            pred_input_title = self.lookup_article_matrix[
-                batch_X[self.inview_col].to_list()
-            ]
+            pred_input_title = self.lookup_article_matrix[batch_X[self.inview_col].to_list()]
             pred_input_title = np.squeeze(pred_input_title, axis=2)
         # =>
         his_input_title = np.squeeze(his_input_title, axis=2)
@@ -283,9 +253,7 @@ class NAMLDataLoader(NewsrecDataLoader):
         (
             self.lookup_article_index_body,
             self.lookup_article_matrix_body,
-        ) = create_lookup_objects(
-            self.body_mapping, unknown_representation=self.unknown_representation
-        )
+        ) = create_lookup_objects(self.body_mapping, unknown_representation=self.unknown_representation)
         if self.eval_mode:
             raise ValueError("'eval_mode = True' is not implemented for NAML")
 
@@ -356,56 +324,28 @@ class NAMLDataLoader(NewsrecDataLoader):
             .with_columns(title.select(pl.all().name.prefix(self.title_prefix)))
             .with_columns(body.select(pl.all().name.prefix(self.body_prefix)))
             .with_columns(category.select(pl.all().name.prefix(self.category_prefix)))
-            .with_columns(
-                subcategory.select(pl.all().name.prefix(self.subcategory_prefix))
-            )
+            .with_columns(subcategory.select(pl.all().name.prefix(self.subcategory_prefix)))
         )
 
     def __getitem__(self, idx) -> tuple[tuple[np.ndarray], np.ndarray]:
-        batch_X = self.X[idx * self.batch_size : (idx + 1) * self.batch_size].pipe(
-            self.transform
-        )
+        batch_X = self.X[idx * self.batch_size : (idx + 1) * self.batch_size].pipe(self.transform)
         batch_y = self.y[idx * self.batch_size : (idx + 1) * self.batch_size]
         # =>
         batch_y = np.array(batch_y.to_list())
-        his_input_title = np.array(
-            batch_X[self.title_prefix + self.history_column].to_list()
-        )
-        his_input_body = np.array(
-            batch_X[self.body_prefix + self.history_column].to_list()
-        )
-        his_input_vert = np.array(
-            batch_X[self.category_prefix + self.history_column].to_list()
-        )[:, :, np.newaxis]
-        his_input_subvert = np.array(
-            batch_X[self.subcategory_prefix + self.history_column].to_list()
-        )[:, :, np.newaxis]
+        his_input_title = np.array(batch_X[self.title_prefix + self.history_column].to_list())
+        his_input_body = np.array(batch_X[self.body_prefix + self.history_column].to_list())
+        his_input_vert = np.array(batch_X[self.category_prefix + self.history_column].to_list())[:, :, np.newaxis]
+        his_input_subvert = np.array(batch_X[self.subcategory_prefix + self.history_column].to_list())[:, :, np.newaxis]
         # =>
-        pred_input_title = np.array(
-            batch_X[self.title_prefix + self.inview_col].to_list()
-        )
-        pred_input_body = np.array(
-            batch_X[self.body_prefix + self.inview_col].to_list()
-        )
-        pred_input_vert = np.array(
-            batch_X[self.category_prefix + self.inview_col].to_list()
-        )[:, :, np.newaxis]
-        pred_input_subvert = np.array(
-            batch_X[self.subcategory_prefix + self.inview_col].to_list()
-        )[:, :, np.newaxis]
+        pred_input_title = np.array(batch_X[self.title_prefix + self.inview_col].to_list())
+        pred_input_body = np.array(batch_X[self.body_prefix + self.inview_col].to_list())
+        pred_input_vert = np.array(batch_X[self.category_prefix + self.inview_col].to_list())[:, :, np.newaxis]
+        pred_input_subvert = np.array(batch_X[self.subcategory_prefix + self.inview_col].to_list())[:, :, np.newaxis]
         # =>
-        his_input_title = np.squeeze(
-            self.lookup_article_matrix[his_input_title], axis=2
-        )
-        pred_input_title = np.squeeze(
-            self.lookup_article_matrix[pred_input_title], axis=2
-        )
-        his_input_body = np.squeeze(
-            self.lookup_article_matrix_body[his_input_body], axis=2
-        )
-        pred_input_body = np.squeeze(
-            self.lookup_article_matrix_body[pred_input_body], axis=2
-        )
+        his_input_title = np.squeeze(self.lookup_article_matrix[his_input_title], axis=2)
+        pred_input_title = np.squeeze(self.lookup_article_matrix[pred_input_title], axis=2)
+        his_input_body = np.squeeze(self.lookup_article_matrix_body[his_input_body], axis=2)
+        pred_input_body = np.squeeze(self.lookup_article_matrix_body[pred_input_body], axis=2)
         # =>
         return (
             his_input_title,
