@@ -1,0 +1,10 @@
+services:
+  trainer:
+    image: trainer:latest
+    build:
+      context: .
+      dockerfile: dockerfiles/train.dockerfile
+    container_name: trainer-container
+    volumes:
+      - ./data:/data
+      - ./models:/models
