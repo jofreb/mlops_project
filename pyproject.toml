@@ -3,12 +3,15 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "my_project"
+name = "nrms_ml_ops"
 version = "0.0.1"
 description = "This is the cookiecutter template we\u0027ll use for our dtu mlops project"
 authors = [
   { name = "adria", email = "your@email.com" },
 ]
+
+[project.scripts]
+train = "nrms_ml_ops.train:main"
 
 keywords = ["machine learning", "MLOps"]
 classifiers = [
