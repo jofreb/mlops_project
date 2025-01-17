@@ -1,0 +1,31 @@
+{
+  "os": "Linux-6.8.0-51-generic-x86_64-with-glibc2.39",
+  "python": "CPython 3.11.11",
+  "startedAt": "2025-01-16T17:51:57.241194Z",
+  "program": "/home/jofre/Documents/Master/Jan_25/ML_Ops/mlops_project/src/nrms_ml_ops/train_wandb.py",
+  "codePath": "src/nrms_ml_ops/train_wandb.py",
+  "git": {
+    "remote": "https://github.com/jofreb/mlops_project.git",
+    "commit": "48c43e04c2a4032da937958f8b792413ddd31eaa"
+  },
+  "email": "s240661@dtu.dk",
+  "root": "/home/jofre/Documents/Master/Jan_25/ML_Ops/mlops_project",
+  "host": "jofre-hpzbookcreateg7notebookpc",
+  "executable": "/home/jofre/.pyenv/versions/env_ml_ops/bin/python3",
+  "codePathLocal": "src/nrms_ml_ops/train_wandb.py",
+  "cpu_count": 6,
+  "cpu_count_logical": 12,
+  "disk": {
+    "/": {
+      "total": "502605742080",
+      "used": "191479136256"
+    }
+  },
+  "memory": {
+    "total": "33417187328"
+  },
+  "cpu": {
+    "count": 6,
+    "countLogical": 12
+  }
+}
