@@ -5,6 +5,7 @@ import polars as pl
 import gc
 import os
 import numpy as np
+import argparse
 
 
 from utils._constants import (
@@ -29,6 +30,17 @@ from model import NRMSModel_docvec
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
+# Command-line argument parsing for model path
+parser = argparse.ArgumentParser(description="Evaluate a trained model.")
+parser.add_argument('--model', type=str, required=True, help="Path to the model weights directory.")
+args = parser.parse_args()
+
+MODEL_WEIGHTS = Path(args.model).expanduser()  # Use the model path provided via --model
+
+# Ensure the model directory exists
+if not MODEL_WEIGHTS.exists():
+    print(f"Error: The model path {MODEL_WEIGHTS} does not exist.")
+    exit(1)
 
 PATH = Path("./data/processed").expanduser()
 DUMP_DIR = PATH.joinpath("ebnerd_predictions")
@@ -44,7 +56,7 @@ embedding = "xlm_roberta_base"
 BATCH_SIZE = 32
 learning_rate = 1e-4
 HISTORY_SIZE = 35
-MODEL_NAME = "NRMS-2025-01-13 15:54:33.945585"
+MODEL_NAME = MODEL_WEIGHTS.name
 MODEL_WEIGHTS = f"./models/{MODEL_NAME}"
 Path(MODEL_WEIGHTS).mkdir(parents=True, exist_ok=True)
 LOG_DIR = DUMP_DIR.joinpath(f"./runs/{MODEL_NAME}")
