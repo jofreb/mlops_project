@@ -1,5 +1,4 @@
 from tqdm import tqdm
-import numpy as np
 import torch
 
 from utils._python import get_torch_device
@@ -61,14 +60,17 @@ def generate_embeddings_with_transformers(
     model = model.to(device)
     padding = "max_length" if max_length else False
     tokenized_text = tokenizer(
-        text_list, padding=padding, truncation=True, return_tensors="pt", add_special_tokens=False,max_length=max_length,
+        text_list,
+        padding=padding,
+        truncation=True,
+        return_tensors="pt",
+        add_special_tokens=False,
+        max_length=max_length,
     )
     print(tokenized_text)
     feature_names = list(tokenized_text)
 
-    dataset = TensorDataset(
-        tokenized_text["input_ids"], tokenized_text["attention_mask"]
-    )
+    dataset = TensorDataset(tokenized_text["input_ids"], tokenized_text["attention_mask"])
     dataloader = DataLoader(dataset, batch_size=batch_size)
     embeddings = []
     with torch.no_grad():
@@ -93,6 +95,4 @@ if __name__ == "__main__":
     ]
     model = AutoModel.from_pretrained(model_name)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    t = generate_embeddings_with_transformers(
-        model, tokenizer, text_list, batch_size, "cpu"
-    )
+    t = generate_embeddings_with_transformers(model, tokenizer, text_list, batch_size, "cpu")

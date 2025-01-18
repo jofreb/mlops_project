@@ -50,9 +50,7 @@ def compute_combinations(n: int, r: int) -> int:
     * we sample without replacement of items
     * order of the outcomes does NOT matter
     """
-    return int(
-        (np.math.factorial(n)) / (np.math.factorial(n - r) * np.math.factorial(r))
-    )
+    return int((np.math.factorial(n)) / (np.math.factorial(n - r) * np.math.factorial(r)))
 
 
 def scale_range(
@@ -193,6 +191,4 @@ def check_key_in_all_nested_dicts(dictionary: dict, key: str) -> None:
     """
     for dict_key, sub_dict in dictionary.items():
         if not isinstance(sub_dict, dict) or key not in sub_dict:
-            raise ValueError(
-                f"'{key}' is not present in '{dict_key}' nested dictionary."
-            )
+            raise ValueError(f"'{key}' is not present in '{dict_key}' nested dictionary.")

@@ -1,14 +1,11 @@
-from transformers import AutoTokenizer, AutoModel
 from pathlib import Path
 import tensorflow as tf
 import datetime as dt
 import polars as pl
 import gc
 import os
-from pathlib import Path
-import sys
 import numpy as np
-import yaml
+import argparse
 
 
 from utils._constants import (
@@ -16,37 +13,34 @@ from utils._constants import (
     DEFAULT_CLICKED_ARTICLES_COL,
     DEFAULT_INVIEW_ARTICLES_COL,
     DEFAULT_IMPRESSION_ID_COL,
-    DEFAULT_SUBTITLE_COL,
-    DEFAULT_LABELS_COL,
-    DEFAULT_TITLE_COL,
     DEFAULT_USER_COL,
-    DEFAULT_IMPRESSION_TIMESTAMP_COL,
 )
 
 from utils._behaviors import (
-    create_binary_labels_column,
-    sampling_strategy_wu2019,
-    add_known_user_column,
     add_prediction_scores,
-    truncate_history,
 )
-from evaluation import MetricEvaluator, AucScore, NdcgScore, MrrScore
-from utils._articles import convert_text2encoding_with_transformers
-from utils._polars import concat_str_columns, slice_join_dataframes
+from evaluation import AucScore
 from utils._articles import create_article_id_to_value_mapping
-from utils._nlp import get_transformers_word_embeddings
-from utils._python import write_submission_file, rank_predictions_by_score
 
 from dataloader import NRMSDataLoader
 from model_config import hparams_nrms
 from model import NRMSModel_docvec
 
-from typing import List, Dict, Any, Tuple, Optional, Union
-from datetime import datetime, timedelta
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
+# Command-line argument parsing for model path
+parser = argparse.ArgumentParser(description="Evaluate a trained model.")
+parser.add_argument('--model', type=str, required=True, help="Path to the model weights directory.")
+args = parser.parse_args()
+
+MODEL_WEIGHTS = Path(args.model).expanduser()  # Use the model path provided via --model
+
+# Ensure the model directory exists
+if not MODEL_WEIGHTS.exists():
+    print(f"Error: The model path {MODEL_WEIGHTS} does not exist.")
+    exit(1)
 
 PATH = Path("./data/processed").expanduser()
 DUMP_DIR = PATH.joinpath("ebnerd_predictions")
@@ -58,11 +52,11 @@ for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
 
 
-embedding = 'xlm_roberta_base'
+embedding = "xlm_roberta_base"
 BATCH_SIZE = 32
 learning_rate = 1e-4
-HISTORY_SIZE =  35
-MODEL_NAME = "NRMS-2025-01-13 15:54:33.945585"
+HISTORY_SIZE = 35
+MODEL_NAME = MODEL_WEIGHTS.name
 MODEL_WEIGHTS = f"./models/{MODEL_NAME}"
 Path(MODEL_WEIGHTS).mkdir(parents=True, exist_ok=True)
 LOG_DIR = DUMP_DIR.joinpath(f"./runs/{MODEL_NAME}")
@@ -80,12 +74,14 @@ df_test = pl.read_parquet(PATH.joinpath("test.parquet"))
 
 df_articles = pl.read_parquet(PATH.joinpath("articles.parquet"))
 
-precomputed_embeddings = pl.read_parquet(PATH.joinpath(embedding+".parquet"))
+precomputed_embeddings = pl.read_parquet(PATH.joinpath(embedding + ".parquet"))
 
-precomputed_embeddings = precomputed_embeddings.filter(precomputed_embeddings['article_id'].is_in(df_articles['article_id']))
-precomputed_embeddings = precomputed_embeddings.rename({'FacebookAI/xlm-roberta-base': 'embedding'})
+precomputed_embeddings = precomputed_embeddings.filter(
+    precomputed_embeddings["article_id"].is_in(df_articles["article_id"])
+)
+precomputed_embeddings = precomputed_embeddings.rename({"FacebookAI/xlm-roberta-base": "embedding"})
 
-pre_embs = np.array([precomputed_embeddings['embedding'][0]])
+pre_embs = np.array([precomputed_embeddings["embedding"][0]])
 
 article_mapping = create_article_id_to_value_mapping(
     df=precomputed_embeddings,
@@ -122,7 +118,7 @@ model.model.compile(
 gc.collect()
 
 print("loading model...")
-model.model.load_weights(MODEL_WEIGHTS+"nrms.weights.h5")
+model.model.load_weights(MODEL_WEIGHTS + "nrms.weights.h5")
 
 pred_test = model.scorer.predict(test_dataloader)
 df_test = add_prediction_scores(df_test, pred_test.tolist())
