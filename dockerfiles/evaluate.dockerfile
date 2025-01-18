@@ -21,11 +21,5 @@ COPY models models
 RUN pip install -r requirements.txt --no-cache-dir --verbose
 RUN pip install . --no-deps --no-cache-dir --verbose
 
-# set default environment variables
-ENV MODEL_PATH = "models/NRMS-2025-01-16 12:12:06.728963nrms.weights.h5"
-
 # set the command to run the application
 ENTRYPOINT ["python", "-u", "src/nrms_ml_ops/evaluate.py"]
-
-# add argument with the model path
-CMD ["--model", "models/model.h5"]
