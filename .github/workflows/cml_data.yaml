@@ -38,4 +38,4 @@ jobs:
 
     - name: Check data statistics
       run: |
-        python dataset_statistics.py
+        python src/nrms_ml_ops/dataset_statistics.py
