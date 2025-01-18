@@ -24,7 +24,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        make dev_requirements
+        make requirements_dev
         pip list
 
     - name: Auth with GCP
