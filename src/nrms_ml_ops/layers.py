@@ -72,9 +72,7 @@ class AttLayer2(layers.Layer):
         else:
             attention = K.exp(attention) * K.cast(mask, dtype="float32")
 
-        attention_weight = attention / (
-            K.sum(attention, axis=-1, keepdims=True) + K.epsilon()
-        )
+        attention_weight = attention / (K.sum(attention, axis=-1, keepdims=True) + K.epsilon())
 
         attention_weight = K.expand_dims(attention_weight)
         weighted_input = inputs * attention_weight
@@ -212,25 +210,17 @@ class SelfAttention(layers.Layer):
         elif len(QKVs) == 5:
             Q_seq, K_seq, V_seq, Q_len, V_len = QKVs
         Q_seq = K.dot(Q_seq, self.WQ)
-        Q_seq = K.reshape(
-            Q_seq, shape=(-1, K.shape(Q_seq)[1], self.multiheads, self.head_dim)
-        )
+        Q_seq = K.reshape(Q_seq, shape=(-1, K.shape(Q_seq)[1], self.multiheads, self.head_dim))
         Q_seq = K.permute_dimensions(Q_seq, pattern=(0, 2, 1, 3))
 
         K_seq = K.dot(K_seq, self.WK)
-        K_seq = K.reshape(
-            K_seq, shape=(-1, K.shape(K_seq)[1], self.multiheads, self.head_dim)
-        )
+        K_seq = K.reshape(K_seq, shape=(-1, K.shape(K_seq)[1], self.multiheads, self.head_dim))
         K_seq = K.permute_dimensions(K_seq, pattern=(0, 2, 1, 3))
 
         V_seq = K.dot(V_seq, self.WV)
-        V_seq = K.reshape(
-            V_seq, shape=(-1, K.shape(V_seq)[1], self.multiheads, self.head_dim)
-        )
+        V_seq = K.reshape(V_seq, shape=(-1, K.shape(V_seq)[1], self.multiheads, self.head_dim))
         V_seq = K.permute_dimensions(V_seq, pattern=(0, 2, 1, 3))
-        A = tf.matmul(Q_seq, K_seq, adjoint_a=False, adjoint_b=True) / K.sqrt(
-            K.cast(self.head_dim, dtype="float32")
-        )
+        A = tf.matmul(Q_seq, K_seq, adjoint_a=False, adjoint_b=True) / K.sqrt(K.cast(self.head_dim, dtype="float32"))
 
         A = K.permute_dimensions(
             A, pattern=(0, 3, 2, 1)

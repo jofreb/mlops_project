@@ -1,0 +1,18 @@
+services:
+  train:
+    image: train:latest
+    build:
+      context: .
+      dockerfile: dockerfiles/train.dockerfile
+    container_name: trainer-container
+    volumes:
+      - ./data:/data
+      - ./models:/models
+  
+  evaluate:
+    image: evaluate:latest
+    build:
+      context: .
+      dockerfile: dockerfiles/evaluate.dockerfile
+    volumes:
+      - ./models:/models  # Mount models directory

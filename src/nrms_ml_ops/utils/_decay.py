@@ -26,9 +26,7 @@ def linear_decay_weights(n: int, ascending: bool = True, **kwargs) -> list[float
     return weights if not ascending else weights[::-1]
 
 
-def exponential_decay_weights(
-    n: int, lambda_factor: float, ascending: bool = True, **kwargs
-) -> list[float]:
+def exponential_decay_weights(n: int, lambda_factor: float, ascending: bool = True, **kwargs) -> list[float]:
     """
     Generates a list of weights in an exponential decay pattern.
     Args:
@@ -51,9 +49,7 @@ def exponential_decay_weights(
     return weights if ascending else weights[::-1]
 
 
-def add_decay_weights(
-    df, column: str, decay_func: callable, ascending: bool = True, **kwargs: dict
-):
+def add_decay_weights(df, column: str, decay_func: callable, ascending: bool = True, **kwargs: dict):
     """
     Wrapper function: Adding decay weights to column using decay function scheme
     >>> df = pl.DataFrame(
@@ -97,9 +93,7 @@ def add_decay_weights(
     return df.with_columns(pl.Series(f"{column}_weights", weights))
 
 
-def decay_weighting_nested_lists(
-    df, column_history: str, column_history_weights: str, fill_nulls: int = None
-):
+def decay_weighting_nested_lists(df, column_history: str, column_history_weights: str, fill_nulls: int = None):
     """
     >>> df = pl.DataFrame(
             {
@@ -137,9 +131,7 @@ def decay_weighting_nested_lists(
 
     df = df.with_row_count(GROUP_BY_COLUMN_FIRST)
 
-    exploded_weights = df.drop_nulls(column_history).select(
-        pl.col(column_history_weights).explode()
-    )
+    exploded_weights = df.drop_nulls(column_history).select(pl.col(column_history_weights).explode())
 
     if isinstance(exploded_weights, pl.LazyFrame):
         exploded_weights = exploded_weights.collect()
@@ -152,11 +144,7 @@ def decay_weighting_nested_lists(
         .with_row_count(GROUP_BY_COLUMN_SECOND)
         # Not optimal to explode, I want to compute [1,2,2] * 0.5 => (list * float)
         .explode(column_history)
-        .with_columns(
-            (pl.col(column_history) * pl.col(column_history_weights)).alias(
-                column_history
-            )
-        )
+        .with_columns((pl.col(column_history) * pl.col(column_history_weights)).alias(column_history))
         .group_by([GROUP_BY_COLUMN_SECOND])
         .agg(pl.col(GROUP_BY_COLUMN_FIRST).first(), column_history)
         .group_by(GROUP_BY_COLUMN_FIRST)
@@ -164,8 +152,4 @@ def decay_weighting_nested_lists(
         .sort(GROUP_BY_COLUMN_FIRST)
     )
 
-    return (
-        df.drop(column_history)
-        .join(df_, on=GROUP_BY_COLUMN_FIRST, how="left")
-        .select(COLUMNS)
-    )
+    return df.drop(column_history).join(df_, on=GROUP_BY_COLUMN_FIRST, how="left").select(COLUMNS)

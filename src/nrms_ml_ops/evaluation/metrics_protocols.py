@@ -25,9 +25,7 @@ class AccuracyScore(Metric):
     def calculate(self, y_true: list[np.ndarray], y_pred: list[np.ndarray]) -> float:
         res = np.mean(
             [
-                accuracy_score(
-                    each_labels, convert_to_binary(each_preds, self.threshold)
-                )
+                accuracy_score(each_labels, convert_to_binary(each_preds, self.threshold))
                 for each_labels, each_preds in zip(y_true, y_pred)
             ]
         )
@@ -55,10 +53,7 @@ class RootMeanSquaredError(Metric):
 
     def calculate(self, y_true: list[np.ndarray], y_pred: list[np.ndarray]) -> float:
         res = np.mean(
-            [
-                np.sqrt(mean_squared_error(each_labels, each_preds))
-                for each_labels, each_preds in zip(y_true, y_pred)
-            ]
+            [np.sqrt(mean_squared_error(each_labels, each_preds)) for each_labels, each_preds in zip(y_true, y_pred)]
         )
         return float(res)
 
@@ -68,12 +63,7 @@ class AucScore(Metric):
         self.name = "auc"
 
     def calculate(self, y_true: list[np.ndarray], y_pred: list[np.ndarray]) -> float:
-        res = np.mean(
-            [
-                roc_auc_score(each_labels, each_preds)
-                for each_labels, each_preds in zip(y_true, y_pred)
-            ]
-        )
+        res = np.mean([roc_auc_score(each_labels, each_preds) for each_labels, each_preds in zip(y_true, y_pred)])
         return float(res)
 
 
@@ -99,12 +89,7 @@ class MrrScore(Metric):
         self.name = "mrr"
 
     def calculate(self, y_true: list[np.ndarray], y_pred: list[np.ndarray]) -> float:
-        mean_mrr = np.mean(
-            [
-                mrr_score(each_labels, each_preds)
-                for each_labels, each_preds in zip(y_true, y_pred)
-            ]
-        )
+        mean_mrr = np.mean([mrr_score(each_labels, each_preds) for each_labels, each_preds in zip(y_true, y_pred)])
         return float(mean_mrr)
 
 
@@ -114,12 +99,7 @@ class NdcgScore(Metric):
         self.name = f"ndcg@{k}"
 
     def calculate(self, y_true: list[np.ndarray], y_pred: list[np.ndarray]) -> float:
-        res = np.mean(
-            [
-                ndcg_score(each_labels, each_preds, self.k)
-                for each_labels, each_preds in zip(y_true, y_pred)
-            ]
-        )
+        res = np.mean([ndcg_score(each_labels, each_preds, self.k) for each_labels, each_preds in zip(y_true, y_pred)])
         return float(res)
 
 
