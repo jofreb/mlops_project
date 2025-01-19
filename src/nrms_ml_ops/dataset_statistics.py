@@ -58,7 +58,7 @@ def dataset_statistics(dataset_path: str):
     total_samples_train = len(train_dataloader.X)
     print(f"Total samples train dataset: {total_samples_train}")
     total_samples_test = len(test_dataloader.X)
-    print(f"Total samples train dataset: {total_samples_test}")
+    print(f"Total samples test dataset: {total_samples_test}")
 
     # Label distribution
     label_counts_train = (
@@ -73,12 +73,6 @@ def dataset_statistics(dataset_path: str):
         .count()
         .to_dict(as_series=False)
     )
-    print("Label distribution in train set:")
-    for label, count in label_counts_train[DEFAULT_LABELS_COL].items():
-        print(f"  Label {label}: {count} samples")
-    print("Label distribution in test set:")
-    for label, count in label_counts_test[DEFAULT_LABELS_COL].items():
-        print(f"  Label {label}: {count} samples")
 
     # Average articles in history
     avg_history_len_train = train_dataloader.X[DEFAULT_HISTORY_ARTICLE_ID_COL].list.len().mean()
