@@ -43,4 +43,4 @@ jobs:
 
     - name: Check data statistics
       run: |
-        python src/nrms_ml_ops/dataset_statistics.py
+        python src/nrms_ml_ops/dataset_statistics.py gs://project_mlops_bucket/data/processed/
