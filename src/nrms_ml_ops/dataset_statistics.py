@@ -14,9 +14,9 @@ def dataset_statistics(dataset_path: str):
     Compute dataset statistics.
     """
 
-    df_train = pl.read_parquet(dataset_path.joinpath("train.parquet"))
-    df_validation= pl.read_parquet(dataset_path.joinpath("validation.parquet"))
-    df_articles = pl.read_parquet(dataset_path.joinpath("articles.parquet"))
+    df_train = pl.read_parquet(f"{dataset_path}/train.parquet")
+    df_validation= pl.read_parquet(f"{dataset_path}/validation.parquet")
+    df_articles = pl.read_parquet(f"{dataset_path}/articles.parquet")
 
     # Load the dataset using Polars
     print(f"Loading dataset from: {dataset_path}")
