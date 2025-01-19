@@ -22,15 +22,19 @@ jobs:
         cache: 'pip'
         cache-dependency-path: setup.py
 
-    - name: Install runtime dependencies
+    - name: Cache Python dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt', 'requirements-dev.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
       run: |
         pip install -r requirements.txt
+        pip install -r requirements-dev.txt
         pip list
-
-    - name: Install development dependencies
-      if: always()
-      run: |
-        pip install -r requirements-dev.txt || echo "No dev requirements found."
 
     - name: Auth with GCP
       uses: google-github-actions/auth@v2
@@ -43,4 +47,4 @@ jobs:
 
     - name: Check data statistics
       run: |
-        python src/nrms_ml_ops/dataset_statistics.py gs://project_mlops_bucket/data/processed/
+        python src/nrms_ml_ops/dataset_statistics.py "gs://project_mlops_bucket/data/processed/"
