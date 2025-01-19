@@ -9,7 +9,6 @@ import torch
 import time
 import json
 import yaml
-import time
 
 
 def read_json_file(path: str, verbose: bool = False) -> dict:
@@ -196,15 +195,11 @@ def df_shape_time_it(enable=True):
                 try:
                     # Incase of LazyFrame, this is not possible:
                     end_shape = result.shape
-                    row_dropped_frac = round(
-                        (start_shape[0] - end_shape[0]) / start_shape[0] * 100, 2
-                    )
+                    row_dropped_frac = round((start_shape[0] - end_shape[0]) / start_shape[0] * 100, 2)
                     shape_ba = f"=> Before/After: {start_shape}/{end_shape} ({row_dropped_frac}% rows dropped)"
                 except:
-                    shape_ba = f"=> Before/After: NA/NA (NA% rows dropped)"
-                print(
-                    f"""Time taken by '{func.__name__}': {time_taken} seconds\n{shape_ba}"""
-                )
+                    shape_ba = "=> Before/After: NA/NA (NA% rows dropped)"
+                print(f"""Time taken by '{func.__name__}': {time_taken} seconds\n{shape_ba}""")
             return result
 
         return wrapper
@@ -280,11 +275,7 @@ def get_object_variables(object_: object) -> dict:
     >>> get_object_variables(example)
         {'a': 2, 'b': 3}
     """
-    return {
-        name: value
-        for name, value in vars(object_).items()
-        if not name.startswith("__") and not callable(value)
-    }
+    return {name: value for name, value in vars(object_).items() if not name.startswith("__") and not callable(value)}
 
 
 def batch_items_generator(items: Iterable[any], batch_size: int):
@@ -465,9 +456,7 @@ def create_lookup_objects(
             [0.7, 0.8, 0.9]])
     """
     # MAKE LOOKUP DICTIONARY
-    lookup_indexes = {
-        id: pl.Series("", [i]) for i, id in enumerate(lookup_dictionary, start=1)
-    }
+    lookup_indexes = {id: pl.Series("", [i]) for i, id in enumerate(lookup_dictionary, start=1)}
     # MAKE LOOKUP MATRIX
     lookup_matrix = np.array(list(lookup_dictionary.values()))
 
@@ -476,9 +465,7 @@ def create_lookup_objects(
     elif unknown_representation == "mean":
         UNKNOWN_ARRAY = np.mean(lookup_matrix, axis=0, dtype=lookup_matrix.dtype)
     else:
-        raise ValueError(
-            f"'{unknown_representation}' is not a specified method. Can be either 'zeros' or 'mean'."
-        )
+        raise ValueError(f"'{unknown_representation}' is not a specified method. Can be either 'zeros' or 'mean'.")
 
     lookup_matrix = np.vstack([UNKNOWN_ARRAY, lookup_matrix])
     return lookup_indexes, lookup_matrix
