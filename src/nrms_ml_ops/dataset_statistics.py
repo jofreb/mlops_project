@@ -14,15 +14,15 @@ def dataset_statistics(dataset_path: str):
     Compute dataset statistics.
     """
 
-    df_train = pl.read_parquet(f"{dataset_path}/train.parquet")
-    df_validation= pl.read_parquet(f"{dataset_path}/validation.parquet")
-    df_articles = pl.read_parquet(f"{dataset_path}/articles.parquet")
+    df_train = pl.read_parquet(f"{dataset_path}train.parquet")
+    df_validation= pl.read_parquet(f"{dataset_path}validation.parquet")
+    df_articles = pl.read_parquet(f"{dataset_path}articles.parquet")
 
     # Load the dataset using Polars
     print(f"Loading dataset from: {dataset_path}")
 
     embedding = 'xlm_roberta_base'
-    precomputed_embeddings = pl.read_parquet(dataset_path.joinpath(embedding+".parquet"))
+    precomputed_embeddings = pl.read_parquet(f"{dataset_path}{embedding}.parquet")
 
     precomputed_embeddings = precomputed_embeddings.filter(precomputed_embeddings['article_id'].is_in(df_articles['article_id']))
     precomputed_embeddings = precomputed_embeddings.rename({'FacebookAI/xlm-roberta-base': 'embedding'})
