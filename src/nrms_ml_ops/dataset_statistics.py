@@ -1,4 +1,4 @@
-import numpy as np
+#import numpy as np
 import polars as pl
 import typer
 
@@ -27,7 +27,7 @@ def dataset_statistics(dataset_path: str):
     precomputed_embeddings = precomputed_embeddings.filter(precomputed_embeddings['article_id'].is_in(df_articles['article_id']))
     precomputed_embeddings = precomputed_embeddings.rename({'FacebookAI/xlm-roberta-base': 'embedding'})
 
-    pre_embs = np.array([precomputed_embeddings['embedding'][0]])
+    #pre_embs = np.array([precomputed_embeddings['embedding'][0]])
 
     article_mapping = create_article_id_to_value_mapping(
         df=precomputed_embeddings,
@@ -85,32 +85,8 @@ def dataset_statistics(dataset_path: str):
     avg_inview_len = train_dataloader.X[DEFAULT_INVIEW_ARTICLES_COL].list.len().mean()
     print(f"Average number of articles in view: {avg_inview_len:.2f}")
 
-    # Number of unique users
-    unique_users = train_dataloader.X[DEFAULT_LABELS_COL].n_unique()
-    print(f"Number of unique users: {unique_users}")
-
-    # Number of unique articles in history and in view
-    unique_history_articles = (
-        train_dataloader.X[DEFAULT_HISTORY_ARTICLE_ID_COL]
-        .explode()
-        .n_unique()
-    )
-    unique_inview_articles = (
-        train_dataloader.X[DEFAULT_INVIEW_ARTICLES_COL]
-        .explode()
-        .n_unique()
-    )
-    print(f"Number of unique articles in user history: {unique_history_articles}")
-    print(f"Number of unique articles in view: {unique_inview_articles}")
-
-    # Unknown article handling
-    unknown_article_count = (
-        train_dataloader.X[DEFAULT_HISTORY_ARTICLE_ID_COL]
-        .explode()
-        .to_list()
-        .count(train_dataloader.unknown_index[0])
-    )
-    print(f"Number of 'unknown' articles in history: {unknown_article_count}")
+    print("Sample dataset:",train_dataloader.X)
+    print("Dataset columns:", train_dataloader.X.columns)
 
     print("\nStatistics computation complete.")
 
