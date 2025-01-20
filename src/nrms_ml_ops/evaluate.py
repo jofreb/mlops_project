@@ -30,12 +30,7 @@ from model import NRMSModel_docvec
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
-# Command-line argument parsing for model path
-parser = argparse.ArgumentParser(description="Evaluate a trained model.")
-parser.add_argument('--model', type=str, required=True, help="Path to the model weights directory.")
-args = parser.parse_args()
-
-MODEL_WEIGHTS = Path(args.model).expanduser()  # Use the model path provided via --model
+MODEL_WEIGHTS = Path("./models/NRMS-2025-01-16 19:02:02.391836nrms.weights.h5").expanduser()  # Set the model weights path directly
 
 # Ensure the model directory exists
 if not MODEL_WEIGHTS.exists():
@@ -56,9 +51,7 @@ embedding = "xlm_roberta_base"
 BATCH_SIZE = 32
 learning_rate = 1e-4
 HISTORY_SIZE = 35
-MODEL_NAME = MODEL_WEIGHTS.name
-MODEL_WEIGHTS = f"./models/{MODEL_NAME}"
-Path(MODEL_WEIGHTS).mkdir(parents=True, exist_ok=True)
+MODEL_NAME = MODEL_WEIGHTS.stem
 LOG_DIR = DUMP_DIR.joinpath(f"./runs/{MODEL_NAME}")
 
 COLUMNS = [
@@ -118,8 +111,15 @@ model.model.compile(
 gc.collect()
 
 print("loading model...")
-model.model.load_weights(MODEL_WEIGHTS + "nrms.weights.h5")
+model.model.load_weights(str(MODEL_WEIGHTS))
 
+pred_test = model.scorer.predict(test_dataloader)
+df_test = add_prediction_scores(df_test, pred_test.tolist())
+
+aucsc = AucScore()
+auc = aucsc.calculate(y_true=df_test["labels"].to_list(), y_pred=df_test["scores"].to_list())
+
+print(f"Test AUC: {auc}")
 pred_test = model.scorer.predict(test_dataloader)
 df_test = add_prediction_scores(df_test, pred_test.tolist())
 
