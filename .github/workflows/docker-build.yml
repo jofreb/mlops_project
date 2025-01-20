@@ -14,4 +14,4 @@ jobs:
     - name: Build the Docker image for training
       run: docker build . --file dockerfiles/train.dockerfile --tag train:$(date +%s)
     - name: Build the Docker image for evaluation
-      run: docker build . --file dockerfiles/evaluation.dockerfile --tag evaluation:$(date +%s)
+      run: docker build . --file dockerfiles/evaluate.dockerfile --tag evaluate:$(date +%s)
