@@ -60,8 +60,8 @@ will check the repositories and the code to verify your answers.
 * [ ] Do a bit of code typing and remember to document essential parts of your code (M7)
 * [x] Setup version control for your data or part of your data (M8) **Adri**
 * [ ] Add command line interfaces and project commands to your code where it makes sense (M9) 
-* [ ] Construct one or multiple docker files for your code (M10) **Paula**
-* [ ] Build the docker files locally and make sure they work as intended (M10) **Paula**
+* [x] Construct one or multiple docker files for your code (M10) **Paula**
+* [x] Build the docker files locally and make sure they work as intended (M10) **Paula**
 * [ ] Write one or multiple configurations files for your experiments (M11)
 * [ ] Used Hydra to load the configurations and manage your hyperparameters (M11)
 * [ ] Use profiling to optimize your code (M12)  
