@@ -58,7 +58,7 @@ will check the repositories and the code to verify your answers.
     are using (M2+M6)
 * [x] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
 * [ ] Do a bit of code typing and remember to document essential parts of your code (M7)
-* [ ] Setup version control for your data or part of your data (M8) **Adri**
+* [x] Setup version control for your data or part of your data (M8) **Adri**
 * [ ] Add command line interfaces and project commands to your code where it makes sense (M9) 
 * [x] Construct one or multiple docker files for your code (M10) **Paula**
 * [x] Build the docker files locally and make sure they work as intended (M10) **Paula**
@@ -79,9 +79,9 @@ will check the repositories and the code to verify your answers.
 * [ ] Add caching and multi-os/python/pytorch testing to your continuous integration (M17) 
 * [ ] Add a linting step to your continuous integration (M17) 
 * [ ] Add pre-commit hooks to your version control setup (M18)
-* [ ] Add a continues workflow that triggers when data changes (M19) **Adri**
+* [X] Add a continues workflow that triggers when data changes (M19) **Adri**
 * [ ] Add a continues workflow that triggers when changes to the model registry is made (M19) **Jofre**
-* [ ] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21) **Adri**
+* [X] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21) **Adri**
 * [ ] Create a trigger workflow for automatically building your docker images (M21) **Paula**
 * [ ] Get your model training in GCP using either the Engine or Vertex AI (M21) **Adri**
 * [ ] Create a FastAPI application that can do inference using your model (M22) **Paula**
