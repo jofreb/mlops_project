@@ -12,4 +12,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file .github/workflows/docker-build.yml --tag train:$(date +%s)
+      run: docker build . --file dockerfiles/train.dockerfile --tag train:$(date +%s)
