@@ -1,0 +1,30 @@
+name: Build Docker Images with Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Compose
+        uses: docker/compose-cli-action@v0.1.1
+        with:
+          compose-cli-version: 1.0.17
+
+      - name: Build Docker images
+        run: docker-compose build
+
+      - name: Push Docker images
+        run: docker-compose push
+
+      - name: Clean up
+        run: docker-compose down
