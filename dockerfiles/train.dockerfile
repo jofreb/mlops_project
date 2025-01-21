@@ -22,4 +22,4 @@ RUN pip install -r requirements.txt --no-cache-dir --verbose
 RUN pip install . --no-deps --no-cache-dir --verbose
 
 # set the command to run the application
-ENTRYPOINT ["python", "-u", "src/nrms_ml_ops/train.py"]
+ENTRYPOINT ["python", "-u", "src/nrms_ml_ops/train_cloud.py"]
