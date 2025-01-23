@@ -7,45 +7,34 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # Step 1: Authenticate with Google Cloud
     - name: Authenticate with Google Cloud
-      uses: google-github-actions/auth@v2
+      uses: google-github-actions/auth@v1
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-    # Step 2: Set up Docker Buildx for building multi-platform images
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: "mythic-music-447818-m3"
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
 
-    # Step 3: Build the Docker image for training
-    - name: Build the Docker image for training
-      run: docker build . --file dockerfiles/train.dockerfile --tag gcr.io/mythic-music-447818-m3/train:latest
-
-    # Step 5: Push the Docker images to Google Container Registry (GCR)
-    # - name: Push the Docker image for training
-    #   run: |
-    #     docker push gcr.io/mythic-music-447818-m3/train:latest
-
-    - name: Set up Docker to use Google Cloud credentials
+    - name: Configure Docker for Artifact Registry
       run: |
-        gcloud auth configure-docker --quiet
-      
-    - name: Push Docker image to Artifact Registry
+        gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+    - name: Build the Docker image
       run: |
-        # Configura el nombre del repositorio y la región
-        IMAGE_NAME="train"
-        REGION="europe-west1"
-        PROJECT_ID="mythic-music-447818-m3d"
-        REPOSITORY_NAME="mlops-project-containers"
-        
-        # Etiqueta la imagen con la URL del Artifact Registry
-        docker tag train:latest ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY_NAME}/${IMAGE_NAME}:latest
-        
-        # Empuja la imagen al Artifact Registry
-        # docker push ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY_NAME}/${IMAGE_NAME}:latest
+        docker build . \
+          --file dockerfiles/train_cloud.dockerfile \
+          --tag europe-west1-docker.pkg.dev/mythic-music-447818-m3/mlops-project-containers/train:latest
+
+    - name: Push the Docker image to Google Artifact Registry
+      run: |
+        docker push europe-west1-docker.pkg.dev/mythic-music-447818-m3/mlops-project-containers/train:latest
