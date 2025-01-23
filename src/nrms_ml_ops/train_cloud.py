@@ -162,25 +162,30 @@ gc.collect()
 
 print("saving model...")
 model.model.save_weights(MODEL_WEIGHTS + "nrms.weights.h5")
-model.model.save_weights("models/cloud/nrms.weights.h5")
+#model.model.save_weights("models/cloud/nrms.weights.h5")
 
 from google.cloud import storage
+import tempfile
 
-def upload_to_gcs(local_file_path, bucket_name, destination_blob_name):
+
+def save_weights_to_gcs(model, bucket_name, blob_name):
     """
-    Upload the model to Google Cloud Storage
+    Save TensorFlow model weights directly to GCS.
     """
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_name)
-    blob.upload_from_filename(local_file_path)
-    print(f"File {local_file_path} uploaded to {destination_blob_name}.")
+    blob = bucket.blob(blob_name)
 
-# Example usage
-local_model_path = "models/cloud/nrms.weights.h5"
+    # Use a temporary file to save the weights locally before uploading
+    with tempfile.NamedTemporaryFile() as temp_file:
+        model.save_weights(temp_file.name)
+        blob.upload_from_filename(temp_file.name)
+        print(f"Weights uploaded to gs://{bucket_name}/{blob_name}")
+
+# Save model weights to GCS
 bucket_name = "project_mlops_bucket"
-destination_blob_name = "models/nrms.weights.h5"
-upload_to_gcs(local_model_path, bucket_name, destination_blob_name)
+blob_name = "models/nrms.weights.h5"
+save_weights_to_gcs(model.model, bucket_name, blob_name)
 
 
 print("Correctly ended")
