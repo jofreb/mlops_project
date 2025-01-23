@@ -37,7 +37,7 @@ for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
 
 
-EPOCHS = 10
+EPOCHS = 2
 embedding = "xlm_roberta_base"
 BATCH_SIZE = 32
 learning_rate = 1e-4
@@ -64,6 +64,8 @@ df_train = pl.read_parquet(PATH.joinpath("train.parquet"))
 
 df_validation = pl.read_parquet(PATH.joinpath("validation.parquet"))
 
+if len(df_train.shape) != len(df_validation.shape):
+    raise ValueError("Train and validation dataframes have different shapes")
 
 df_articles = pl.read_parquet(PATH.joinpath("articles.parquet"))
 
