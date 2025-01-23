@@ -4,7 +4,7 @@ import datetime
 import inspect
 
 
-from utils._polars import (
+from src.nrms_ml_ops.utils._polars import (
     _check_columns_in_df,
     drop_nulls_from_list,
     generate_unique_name,
@@ -12,7 +12,7 @@ from utils._polars import (
 )
 import polars as pl
 
-from utils._constants import (
+from src.nrms_ml_ops.utils._constants import (
     DEFAULT_IMPRESSION_TIMESTAMP_COL,
     DEFAULT_CLICKED_ARTICLES_COL,
     DEFAULT_INVIEW_ARTICLES_COL,
@@ -21,7 +21,7 @@ from utils._constants import (
     DEFAULT_LABELS_COL,
     DEFAULT_USER_COL,
 )
-from utils._python import create_lookup_dict
+from src.nrms_ml_ops.utils._python import create_lookup_dict
 
 
 def create_binary_labels_column(
