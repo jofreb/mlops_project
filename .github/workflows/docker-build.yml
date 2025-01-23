@@ -7,11 +7,34 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image for training
-      run: docker build . --file dockerfiles/train.dockerfile --tag train:$(date +%s)
-    - name: Build the Docker image for evaluation
-      run: docker build . --file dockerfiles/evaluate.dockerfile --tag evaluate:$(date +%s)
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Authenticate with Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: "mythic-music-447818-m3"
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Configure Docker for Artifact Registry
+      run: |
+        gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+    - name: Build the Docker image
+      run: |
+        docker build . \
+          --file dockerfiles/train_cloud.dockerfile \
+          --tag europe-west1-docker.pkg.dev/mythic-music-447818-m3/mlops-project-containers/train:latest
+
+    - name: Push the Docker image to Google Artifact Registry
+      run: |
+        docker push europe-west1-docker.pkg.dev/mythic-music-447818-m3/mlops-project-containers/train:latest
