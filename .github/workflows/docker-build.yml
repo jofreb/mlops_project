@@ -28,9 +28,9 @@ jobs:
       run: docker build . --file dockerfiles/train.dockerfile --tag gcr.io/mythic-music-447818-m3/train:latest
 
     # Step 5: Push the Docker images to Google Container Registry (GCR)
-    - name: Push the Docker image for training
-      run: |
-        docker push gcr.io/mythic-music-447818-m3/train:latest
+    # - name: Push the Docker image for training
+    #   run: |
+    #     docker push gcr.io/mythic-music-447818-m3/train:latest
 
     - name: Set up Docker to use Google Cloud credentials
       run: |
