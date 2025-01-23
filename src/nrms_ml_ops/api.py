@@ -6,16 +6,17 @@ app = FastAPI()
 
 @app.post("/evaluate/")
 async def evaluate_model():
-    result = subprocess.run(["python", "evaluate_cloud.py"], capture_output=True, text=True)
-    # print("STDOUT:", result.stdout)
-    # print("STDERR:", result.stderr)
-    # Extract the last "Test AUC: " line with numbers from stdout
-    matches = re.findall(r"Test AUC: \d+\.\d+", result.stdout)
-    if matches:
-        last_match = matches[-1]
-    else:
-        last_match = "No AUC found"
-    if result.returncode == 0:
+    try:
+        result = subprocess.run(
+            ["python", "evaluate_cloud.py"],
+            capture_output=True,
+            text=True,
+            check=True  # Levanta un error si el script falla
+        )
+        matches = re.findall(r"Test AUC: \d+\.\d+", result.stdout)
+        last_match = matches[-1] if matches else "No AUC found"
         return {"auc": last_match}
-    else:
-        return {"error": result.stderr.strip()}
+    except subprocess.CalledProcessError as e:
+        return {"error": f"Subprocess failed: {e.stderr.strip()}"}
+    except Exception as e:
+        return {"error": f"Unexpected error: {str(e)}"}
