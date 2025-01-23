@@ -1,0 +1,54 @@
+name: Test FastAPI API
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Configuración inicial del repositorio
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Configuración de Python y dependencias
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install fastapi uvicorn httpx pytest
+
+    # Arranque del servidor FastAPI en segundo plano
+    - name: Start FastAPI app
+      run: |
+        nohup uvicorn api:app --host 0.0.0.0 --port 8000 &
+      env:
+        PYTHONUNBUFFERED: 1
+
+    # Esperar a que la API esté activa
+    - name: Wait for API to be ready
+      run: |
+        sleep 5
+        curl -f http://localhost:8000 || exit 1
+
+    # Pruebas de la API
+    - name: Test API endpoint
+      run: |
+        echo "Running API tests"
+        python -c "
+        import httpx
+        response = httpx.post('http://localhost:8000/evaluate/')
+        assert response.status_code == 200, f'Failed: {response.status_code} {response.text}'
+        print('Test passed successfully!')"
+
+
