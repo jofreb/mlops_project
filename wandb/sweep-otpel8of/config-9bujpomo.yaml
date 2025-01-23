@@ -1,0 +1,8 @@
+wandb_version: 1
+
+batch_size:
+  value: 16
+epochs:
+  value: 25
+learning_rate:
+  value: 0.06667319796566114
