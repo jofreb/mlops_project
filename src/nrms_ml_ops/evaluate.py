@@ -30,11 +30,11 @@ from model import NRMSModel_docvec
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
-MODEL_WEIGHTS = Path("./models/NRMS-2025-01-16 19:02:02.391836nrms.weights.h5").expanduser()  # Set the model weights path directly
+MODEL_WEIGHTS = Path("./models/NRMS-2025-01-23 16:10:47.711802nrms.weights.h5").expanduser()  # Set the model weights path directly
 
 # Ensure the model directory exists
 if not MODEL_WEIGHTS.exists():
-    print(f"Error: The model path {MODEL_WEIGHTS} does not exist.")
+    raise FileNotFoundError(f"Error: The model path {MODEL_WEIGHTS} does not exist.")
     exit(1)
 
 PATH = Path("./data/processed").expanduser()
@@ -113,13 +113,6 @@ gc.collect()
 print("loading model...")
 model.model.load_weights(str(MODEL_WEIGHTS))
 
-pred_test = model.scorer.predict(test_dataloader)
-df_test = add_prediction_scores(df_test, pred_test.tolist())
-
-aucsc = AucScore()
-auc = aucsc.calculate(y_true=df_test["labels"].to_list(), y_pred=df_test["scores"].to_list())
-
-print(f"Test AUC: {auc}")
 pred_test = model.scorer.predict(test_dataloader)
 df_test = add_prediction_scores(df_test, pred_test.tolist())
 
