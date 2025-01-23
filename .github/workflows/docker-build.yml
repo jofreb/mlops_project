@@ -25,12 +25,12 @@ jobs:
 
     # Step 3: Build the Docker image for training
     - name: Build the Docker image for training
-      run: docker build . --file dockerfiles/train.dockerfile --tag gcr.io/mythic-music-447818-m3/train:$(date +%s)
+      run: docker build . --file dockerfiles/train.dockerfile --tag gcr.io/mythic-music-447818-m3/train:latest
 
     # Step 5: Push the Docker images to Google Container Registry (GCR)
     - name: Push the Docker image for training
       run: |
-        docker push gcr.io/mythic-music-447818-m3/train:$(date +%s)
+        docker push gcr.io/mythic-music-447818-m3/train:latest
 
     - name: Set up Docker to use Google Cloud credentials
       run: |
@@ -45,7 +45,7 @@ jobs:
         REPOSITORY_NAME="mlops-project-containers"
         
         # Etiqueta la imagen con la URL del Artifact Registry
-        docker tag train:$(date +%s) ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY_NAME}/${IMAGE_NAME}:latest
+        docker tag train:latest ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY_NAME}/${IMAGE_NAME}:latest
         
         # Empuja la imagen al Artifact Registry
         # docker push ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY_NAME}/${IMAGE_NAME}:latest
