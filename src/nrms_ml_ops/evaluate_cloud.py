@@ -25,12 +25,27 @@ from utils._articles import create_article_id_to_value_mapping
 from dataloader import NRMSDataLoader
 from model_config import hparams_nrms
 from model import NRMSModel_docvec
+from google.cloud import storage
 
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
-MODEL_WEIGHTS = Path("/Users/paulagambus/Documents/DTU/Ml_Ops/mlops_project/models/NRMS-2025-01-17 13:03:23.295214nrms.weights.h5").expanduser()  # Set the model weights path directly
+def download_blob(bucket_name, source_blob_name, destination_file_name):
+    """Downloads a blob from the bucket."""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(source_blob_name)
+    blob.download_to_filename(destination_file_name)
+    print(f"Blob {source_blob_name} downloaded to {destination_file_name}.")
+
+# Define the model weights path
+MODEL_WEIGHTS_LOCAL = Path("/tmp/nrms.weights.h5")
+
+# Download the model weights from the cloud storage
+download_blob("project_mlops_bucket", "models/nrms.weights.h5", str(MODEL_WEIGHTS_LOCAL))
+
+MODEL_WEIGHTS = MODEL_WEIGHTS_LOCAL
 
 # Ensure the model directory exists
 if not MODEL_WEIGHTS.exists():
