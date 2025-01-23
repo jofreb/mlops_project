@@ -1,12 +1,12 @@
 services:
   train:
-    image: train:latest
+    image: gcr.io/mythic-music-447818-m3/train:latest
     build:
       context: .
       dockerfile: dockerfiles/train.dockerfile
     container_name: trainer-container
     volumes:
-      - ./data:/data
+      # - ./data:/data
       - ./models:/models
   
   evaluate:
