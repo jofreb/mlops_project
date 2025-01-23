@@ -33,7 +33,7 @@ jobs:
       run: |
         docker build . \
           --file dockerfiles/train_cloud.dockerfile \
-          --tag grc.io/mythic-music-447818-m3/mlops-project-containers/train:latest
+          --tag europe-west1-docker.pkg.dev/mythic-music-447818-m3/mlops-project-containers/train:latest
 
     - name: Push the Docker image to Google Artifact Registry
       run: |
