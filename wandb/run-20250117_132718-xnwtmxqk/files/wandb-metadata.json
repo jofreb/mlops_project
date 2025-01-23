@@ -1,0 +1,106 @@
+{
+    "os": "Linux-6.8.0-51-generic-x86_64-with-glibc2.39",
+    "python": "CPython 3.11.11",
+    "heartbeatAt": "2025-01-17T12:27:20.483074",
+    "startedAt": "2025-01-17T12:27:18.758469",
+    "docker": null,
+    "args": [
+        "service",
+        "--debug",
+        "--port-filename",
+        "/tmp/tmpaze9jarp/port-159387.txt",
+        "--pid",
+        "159387"
+    ],
+    "state": "running",
+    "program": "/home/jofre/Documents/Master/Jan_25/ML_Ops/mlops_project/src/nrms_ml_ops/train_wandb.py",
+    "codePathLocal": "src/nrms_ml_ops/train_wandb.py",
+    "codePath": "src/nrms_ml_ops/train_wandb.py",
+    "git": {
+        "remote": "https://github.com/jofreb/mlops_project.git",
+        "commit": "5282fee6af43cbeeb9473243ea1faa82209453b2"
+    },
+    "email": "s240661@dtu.dk",
+    "root": "/home/jofre/Documents/Master/Jan_25/ML_Ops/mlops_project",
+    "host": "jofre-hpzbookcreateg7notebookpc",
+    "username": null,
+    "executable": "/home/jofre/.pyenv/versions/env_ml_ops/bin/python",
+    "cpu_count": 6,
+    "cpu_count_logical": 12,
+    "cpu_freq": {
+        "current": 1978.963083333333,
+        "min": 800.0,
+        "max": 5000.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2400.191,
+            "min": 800.0,
+            "max": 5000.0
+        },
+        {
+            "current": 2410.168,
+            "min": 800.0,
+            "max": 5000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5000.0
+        },
+        {
+            "current": 2340.615,
+            "min": 800.0,
+            "max": 5000.0
+        },
+        {
+            "current": 2694.614,
+            "min": 800.0,
+            "max": 5000.0
+        },
+        {
+            "current": 2541.72,
+            "min": 800.0,
+            "max": 5000.0
+        },
+        {
+            "current": 1206.864,
+            "min": 800.0,
+            "max": 5000.0
+        },
+        {
+            "current": 2580.194,
+            "min": 800.0,
+            "max": 5000.0
+        },
+        {
+            "current": 2536.267,
+            "min": 800.0,
+            "max": 5000.0
+        },
+        {
+            "current": 2402.883,
+            "min": 800.0,
+            "max": 5000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5000.0
+        },
+        {
+            "current": 1396.049,
+            "min": 800.0,
+            "max": 5000.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 502605742080,
+            "used": 193908871168
+        }
+    },
+    "memory": {
+        "total": 33417183232
+    }
+}
