@@ -32,7 +32,7 @@ jobs:
     - name: Start FastAPI app
       working-directory: src/nrms_ml_ops
       run: |
-        nohup uvicorn api:app --host 0.0.0.0 --port 8000 &
+        nohup uvicorn api:app --host 127.0.0.1 --port 8000 &
       env:
         PYTHONUNBUFFERED: 1  
 
@@ -48,6 +48,6 @@ jobs:
         echo "Running API tests"
         python -c "
         import httpx
-        response = httpx.post('http://http://127.0.0.1:8000//evaluate/')
+        response = httpx.post('http://127.0.0.1:8000/evaluate/')
         assert response.status_code == 200, f'Failed: {response.status_code} {response.text}'
         print('Test passed successfully!')"
