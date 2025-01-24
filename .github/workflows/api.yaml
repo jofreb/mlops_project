@@ -26,12 +26,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # pip install fastapi uvicorn httpx pytest tensorflow polars tqdm torch
         pip install -r src/nrms_ml_ops/requirements_backend.txt
 
     # Iniciar FastAPI (backend.py)
     - name: Start FastAPI app
-      working-directory: src/nrms_ml_ops  # Cambia esto si el archivo backend.py está en otro directorio
+      working-directory: src/nrms_ml_ops  # Cambiar si backend.py está en otro directorio
       run: |
         nohup uvicorn backend:app --host 127.0.0.1 --port 8000 &
       env:
@@ -40,15 +39,27 @@ jobs:
     # Esperar a que la API esté activa
     - name: Wait for API to be ready
       run: |
-        sleep 40
-        curl -X POST http://127.0.0.1:8000/evaluate/ || exit 1
+        echo "Waiting for API to be ready..."
+        sleep 10
+        curl -X GET http://127.0.0.1:8000/docs || exit 1
 
-    # Pruebas de la API
-    - name: Test API endpoint
+    # Enviar archivo test.parquet a la API
+    - name: Test API with test.parquet
       run: |
-        echo "Running API tests"
+        echo "Sending test.parquet to API..."
+        curl -X POST http://127.0.0.1:8000/evaluate/ \
+          -H "Content-Type: multipart/form-data" \
+          -F "file=@data/processed/test.parquet" || exit 1
+
+    # Validar la respuesta de la API
+    - name: Test API endpoint with Python
+      run: |
+        echo "Running API tests with Python..."
         python -c "
         import httpx
-        response = httpx.post('http://127.0.0.1:8000/evaluate/')
+        response = httpx.post(
+            'http://127.0.0.1:8000/evaluate/',
+            files={'file': open('src/nrms_ml_ops/test.parquet', 'rb')}
+        )
         assert response.status_code == 200, f'Failed: {response.status_code} {response.text}'
         print('Test passed successfully!')"
