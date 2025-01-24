@@ -5,6 +5,7 @@ uvicorn>=0.34.0
 
 # Data manipulation and file handling
 polars>=0.20.8
+PyYAML>=6.0.2
 
 # Machine learning and TensorFlow
 tensorflow>=2.13.0
