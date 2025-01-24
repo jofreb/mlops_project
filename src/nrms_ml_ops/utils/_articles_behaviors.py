@@ -112,16 +112,7 @@ def map_list_article_id_to_value(
     if drop_nulls:
         select_column = select_column.drop_nulls()
     elif fill_nulls is not None:
-        select_column = select_column.with_columns(
-            pl.col(behaviors_column).fill_null(fill_nulls)
-        )
+        select_column = select_column.with_columns(pl.col(behaviors_column).fill_null(fill_nulls))
     # =>
-    select_column = (
-        select_column.lazy().group_by(GROUPBY_ID).agg(behaviors_column).collect()
-    )
-    return (
-        behaviors.drop(behaviors_column)
-        .collect()
-        .join(select_column, on=GROUPBY_ID, how="left")
-        .drop(GROUPBY_ID)
-    )
+    select_column = select_column.lazy().group_by(GROUPBY_ID).agg(behaviors_column).collect()
+    return behaviors.drop(behaviors_column).collect().join(select_column, on=GROUPBY_ID, how="left").drop(GROUPBY_ID)

@@ -1,6 +1,5 @@
 import numpy as np
 import random
-import json
 
 try:
     import polars as pl
@@ -30,9 +29,7 @@ def _check_columns_in_df(df: pl.DataFrame, columns: list[str]) -> None:
     """
     columns_not_in_df = [col for col in columns if col not in df.columns]
     if columns_not_in_df:
-        raise ValueError(
-            f"Invalid input provided. The DataFrame does not contain columns {columns_not_in_df}."
-        )
+        raise ValueError(f"Invalid input provided. The DataFrame does not contain columns {columns_not_in_df}.")
 
 
 def _validate_equal_list_column_lengths(df: pl.DataFrame, col1: str, col2: str) -> bool:
@@ -138,9 +135,7 @@ def from_dict_to_polars(dictionary: dict) -> pl.DataFrame:
         raise ValueError("Series name must be a string.")
             ValueError: Series name must be a string.
     """
-    return pl.DataFrame(
-        {"keys": list(dictionary.keys()), "values": list(dictionary.values())}
-    )
+    return pl.DataFrame({"keys": list(dictionary.keys()), "values": list(dictionary.values())})
 
 
 def shuffle_rows(df: pl.DataFrame, seed: int = None) -> pl.DataFrame:
@@ -276,11 +271,7 @@ def filter_minimum_lengths_from_list(
         │ 4       ┆ ["a"]           │
         └─────────┴─────────────────┘
     """
-    return (
-        df.filter(pl.col(column).list.len() >= n)
-        if column in df and n is not None and n > 0
-        else df
-    )
+    return df.filter(pl.col(column).list.len() >= n) if column in df and n is not None and n > 0 else df
 
 
 def filter_maximum_lengths_from_list(
@@ -329,11 +320,7 @@ def filter_maximum_lengths_from_list(
         │ 4       ┆ ["a"]           │
         └─────────┴─────────────────┘
     """
-    return (
-        df.filter(pl.col(column).list.len() <= n)
-        if column in df and n is not None and n > 0
-        else df
-    )
+    return df.filter(pl.col(column).list.len() <= n) if column in df and n is not None and n > 0 else df
 
 
 def split_df(df, fraction=0.8, seed: int = None, shuffle: bool = True):
@@ -483,11 +470,7 @@ def filter_elements(df: pl.DataFrame, column: str, ids: list[any]) -> pl.DataFra
     GROUPBY_COL = "_groupby"
     COLUMNS = df.columns
     df = df.with_row_index(GROUPBY_COL)
-    df_ = (
-        df.select(pl.col(GROUPBY_COL, column))
-        .drop_nulls()
-        .filter(pl.col(column).is_in(ids))
-    )
+    df_ = df.select(pl.col(GROUPBY_COL, column)).drop_nulls().filter(pl.col(column).is_in(ids))
     return df.drop(column).join(df_, on=GROUPBY_COL, how="left").select(COLUMNS)
 
 
@@ -537,9 +520,7 @@ def filter_empty_text_column(df: pl.DataFrame, column: str) -> pl.DataFrame:
     return df.filter(pl.col(column).str.lengths() > 0)
 
 
-def shuffle_list_column(
-    df: pl.DataFrame, column: str, seed: int = None
-) -> pl.DataFrame:
+def shuffle_list_column(df: pl.DataFrame, column: str, seed: int = None) -> pl.DataFrame:
     """Shuffles the values in a list column of a DataFrame.
 
     Args:
@@ -617,18 +598,8 @@ def shuffle_list_column(
     GROUPBY_ID = generate_unique_name(_COLUMN_ORDER, "_groupby_id")
 
     df = df.with_row_count(GROUPBY_ID)
-    df_shuffle = (
-        df.explode(column)
-        .pipe(shuffle_rows, seed=seed)
-        .group_by(GROUPBY_ID)
-        .agg(column)
-    )
-    return (
-        df.drop(column)
-        .join(df_shuffle, on=GROUPBY_ID, how="left")
-        .drop(GROUPBY_ID)
-        .select(_COLUMN_ORDER)
-    )
+    df_shuffle = df.explode(column).pipe(shuffle_rows, seed=seed).group_by(GROUPBY_ID).agg(column)
+    return df.drop(column).join(df_shuffle, on=GROUPBY_ID, how="left").drop(GROUPBY_ID).select(_COLUMN_ORDER)
 
 
 def split_df_in_n(df: pl.DataFrame, num_splits: int) -> list[pl.DataFrame]:
@@ -678,9 +649,7 @@ def split_df_in_n(df: pl.DataFrame, num_splits: int) -> list[pl.DataFrame]:
 
     """
     rows_per_split = int(np.ceil(df.shape[0] / num_splits))
-    return [
-        df[i * rows_per_split : (1 + i) * rows_per_split] for i in range(num_splits)
-    ]
+    return [df[i * rows_per_split : (1 + i) * rows_per_split] for i in range(num_splits)]
 
 
 def concat_list_str(df: pl.DataFrame, column: str) -> pl.DataFrame:
@@ -713,6 +682,4 @@ def concat_list_str(df: pl.DataFrame, column: str) -> pl.DataFrame:
             │ ij kl   │
             └─────────┘
     """
-    return df.with_columns(
-        pl.col(column).list.eval(pl.element().str.concat(" "))
-    ).explode(column)
+    return df.with_columns(pl.col(column).list.eval(pl.element().str.concat(" "))).explode(column)

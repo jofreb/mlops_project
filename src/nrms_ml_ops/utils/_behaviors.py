@@ -1,6 +1,4 @@
 from typing import Any, Iterable
-from pathlib import Path
-from tqdm import tqdm
 import warnings
 import datetime
 import inspect
@@ -101,22 +99,14 @@ def create_binary_labels_column(
 
     df_labels = (
         df.explode(inview_col)
-        .with_columns(
-            pl.col(inview_col).is_in(pl.col(clicked_col)).cast(pl.Int8).alias(label_col)
-        )
+        .with_columns(pl.col(inview_col).is_in(pl.col(clicked_col)).cast(pl.Int8).alias(label_col))
         .group_by(GROUPBY_ID)
         .agg(label_col)
     )
-    return (
-        df.join(df_labels, on=GROUPBY_ID, how="left")
-        .drop(GROUPBY_ID)
-        .select(_COLUMNS + [label_col])
-    )
+    return df.join(df_labels, on=GROUPBY_ID, how="left").drop(GROUPBY_ID).select(_COLUMNS + [label_col])
 
 
-def create_user_id_to_int_mapping(
-    df: pl.DataFrame, user_col: str = DEFAULT_USER_COL, value_str: str = "id"
-):
+def create_user_id_to_int_mapping(df: pl.DataFrame, user_col: str = DEFAULT_USER_COL, value_str: str = "id"):
     return create_lookup_dict(
         df.select(pl.col(user_col).unique()).with_row_index(value_str),
         key=user_col,
@@ -169,11 +159,7 @@ def filter_read_times(df, n: int, column: str) -> pl.DataFrame:
     """
     Use this to set the cutoff for 'read_time' and 'next_read_time'
     """
-    return (
-        df.filter(pl.col(column) >= n)
-        if column in df and n is not None and n > 0
-        else df
-    )
+    return df.filter(pl.col(column) >= n) if column in df and n is not None and n > 0 else df
 
 
 def unique_article_ids_in_behaviors(
@@ -329,16 +315,9 @@ def sample_article_ids(
     df_ = (
         df.explode(inview_col)
         .group_by(GROUPBY_ID)
-        .agg(
-            pl.col(inview_col).sample(n=n, with_replacement=with_replacement, seed=seed)
-        )
+        .agg(pl.col(inview_col).sample(n=n, with_replacement=with_replacement, seed=seed))
     )
-    return (
-        df.drop(inview_col)
-        .join(df_, on=GROUPBY_ID, how="left")
-        .drop(GROUPBY_ID)
-        .select(_COLUMNS)
-    )
+    return df.drop(inview_col).join(df_, on=GROUPBY_ID, how="left").drop(GROUPBY_ID).select(_COLUMNS)
 
 
 def remove_positives_from_inview(
@@ -529,9 +508,7 @@ def sampling_strategy_wu2019(
     """
     df = (
         # Step 1: Remove the positive 'article_id' from inview articles
-        df.pipe(
-            remove_positives_from_inview, inview_col=inview_col, clicked_col=clicked_col
-        )
+        df.pipe(remove_positives_from_inview, inview_col=inview_col, clicked_col=clicked_col)
         # Step 2: Explode the DataFrame based on the clicked articles column
         .explode(clicked_col)
         # Step 3: Downsample the inview negative 'article_id' according to npratio (negative 'article_id' per positive 'article_id')
@@ -826,9 +803,7 @@ def create_fixed_history(
         )
     )
     if history_size is not None:
-        df_history = df_history.with_columns(
-            pl.col(history_col).list.tail(history_size)
-        )
+        df_history = df_history.with_columns(pl.col(history_col).list.tail(history_size))
     return df.join(df_history, on=user_col, how="left")
 
 
@@ -988,9 +963,7 @@ def create_fixed_history_aggr_columns(
     )
     if history_size is not None:
         for col in aggr_columns:
-            df_history = df_history.with_columns(
-                pl.col(col + suffix).list.tail(history_size)
-            )
+            df_history = df_history.with_columns(pl.col(col + suffix).list.tail(history_size))
     return df.join(df_history, on="user_id", how="left")
 
 

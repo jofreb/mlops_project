@@ -222,6 +222,7 @@ model.model.save_weights(MODEL_WEIGHTS+"nrms.weights.h5")
 model.model.save(MODEL_WEIGHTS + "nrms_model", save_format="tf")  # Saves in SavedModel format
 
 
+
 weights_artifact = wandb.Artifact(
     name="nrms_model_weights",
     type="model-weights",
@@ -229,8 +230,6 @@ weights_artifact = wandb.Artifact(
 )
 weights_artifact.add_file(MODEL_WEIGHTS+"nrms.weights.h5")
 wandb.log_artifact(weights_artifact)
-
-
 
 
 logger.debug("Correctly ended")
