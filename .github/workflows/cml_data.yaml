@@ -46,8 +46,9 @@ jobs:
         dvc pull --no-run-cache
 
     - name: Set PYTHONPATH
-      run: echo "::add-path::$GITHUB_WORKSPACE"
+      run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
       shell: bash
+
 
     - name: Check data statistics
       run: |
