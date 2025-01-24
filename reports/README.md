@@ -178,12 +178,12 @@ Therefore, if a new member joins our team, the first needed step is to clone the
 >
 > Recommended answer length: 100-200 words
 >
-> From the cookiecutter template we have filled out the main folders that contain the main files of every machine learning project: folder that contain the main python files to run the model, dockerfiles folder, .github folder to define the workflows for github actions and tests. 
-We have added the following folders: wandb and .dvc to perform the data monitoring and data version control in google cloud.
+> 
 >
 > Answer:
 
---- question 5 fill here ---
+From the cookiecutter template we have filled out the main folders that contain the main files of every machine learning project: folder that contain the main python files to run the model, dockerfiles folder, .github folder to define the workflows for github actions and tests. 
+We have added the following folders: wandb and .dvc to perform the data monitoring and data version control in google cloud.
 
 ### Question 6
 
@@ -513,8 +513,7 @@ We packed our API application into a Docker image and uploaded it to Google Arti
 > *before the service crashed.*
 >
 > Answer:
-
---- question 25 fill here ---
+We did not perform unit testing or load testing for the API. However, for unit testing, we would use pytest with the FastAPI TestClient to simulate API calls and validate that endpoints return expected outputs. For load testing, we would use the locust framework to simulate concurrent user interactions by defining tasks for different endpoints and measuring metrics like average response time, 99th percentile response time, and requests per second. This would help ensure the API's functionality, scalability, and reliability under peak loads.
 
 ### Question 26
 
@@ -562,9 +561,7 @@ The credits used are shown in the picture ![alt text](figures/credits_used.png),
 > *We implemented a frontend for our API. We did this because we wanted to show the user ... . The frontend was*
 > *implemented using ...*
 >
-> Answer:
-
---- question 28 fill here ---
+We did not add anything extra. 
 
 ### Question 29
 
@@ -581,7 +578,8 @@ The credits used are shown in the picture ![alt text](figures/credits_used.png),
 >
 > Answer:
 
---- question 29 fill here ---
+Our final system would have the following structure. The starting point of our the diagram is a base model which we implemented locally with some local logging. Then we have a module that implements a wandb thorough search for obtaining the optimal hyperparameters. This optimal model, is then created a docker image of the model. This docker image is on the Cloud. Then the container is executed through a Vertex AI,leveraging the data on cloud storage. The image is quite similar to the one provided it, hence that we didn't change it. 
+[this figure](figures/overview.png)
 
 ### Question 30
 
@@ -617,6 +615,10 @@ Another big challenge was keeping up with all the contents of this short course 
 > Answer:
 
 Student *s233219* was in charge of everything related to Docker, using it locally and also adding the files to the cloud. Moreover, the workflows related to check the construction of the Docker images and upload them to the cloud was their job. This student also worked with the API and everything related to it.
+
+Student *s240661* was in charge of including logging functions to the project, both basic logic instructions as well as implementing and running all the wandb framework to the project.
+
+Student s242781 was in charge of unit testing, firstlly implemented locally and afterwards incorporating the test in workflows, ensuring continuos integration in Github repository. Additionally, the student was in charged of obtaining the coverange
 
 Student *s232775* was in charge of the data version control and the managing of the google cloud account where all the services were run. This student made sure the team used all the tools required to scale the project in the cloud, and designed workflow tests integrated with the cloud through Github Secrets where we stored GCP's API key.
 
