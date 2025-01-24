@@ -1,4 +1,4 @@
-from utils._python import generate_unique_name
+from src.nrms_ml_ops.utils._python import generate_unique_name
 
 try:
     import polars as pl

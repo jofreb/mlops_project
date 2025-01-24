@@ -72,18 +72,18 @@ will check the repositories and the code to verify your answers.
 
 ### Week 2
 
-* [ ] Write unit tests related to the data part of your code (M16) **Edgar**
-* [ ] Write unit tests related to model construction and or model training (M16) **Edgar**
-* [ ] Calculate the code coverage (M16) **Edgar**
-* [ ] Get some continuous integration running on the GitHub repository (M17) **Edgar**
-* [ ] Add caching and multi-os/python/pytorch testing to your continuous integration (M17) 
+* [X] Write unit tests related to the data part of your code (M16) **Edgar**
+* [X] Write unit tests related to model construction and or model training (M16) **Edgar**
+* [X] Calculate the code coverage (M16) **Edgar**
+* [X] Get some continuous integration running on the GitHub repository (M17) **Edgar**
+* [X] Add caching and multi-os/python/pytorch testing to your continuous integration (M17) 
 * [ ] Add a linting step to your continuous integration (M17) 
 * [ ] Add pre-commit hooks to your version control setup (M18)
 * [X] Add a continues workflow that triggers when data changes (M19) **Adri**
 * [X] Add a continues workflow that triggers when changes to the model registry is made (M19) **Jofre**
 * [X] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21) **Adri**
 * [x] Create a trigger workflow for automatically building your docker images (M21) **Paula**
-* [ ] Get your model training in GCP using either the Engine or Vertex AI (M21) **Adri**
+* [X] Get your model training in GCP using either the Engine or Vertex AI (M21) **Adri**
 * [x] Create a FastAPI application that can do inference using your model (M22) **Paula**
 * [ ] Deploy your model in GCP using either Functions or Run as the backend (M23) **Adri**
 * [x] Write API tests for your application and setup continues integration for these (M24) **Paula**
@@ -109,7 +109,7 @@ will check the repositories and the code to verify your answers.
 * [ ] Revisit your initial project description. Did the project turn out as you wanted?
 * [ ] Create an architectural diagram over your MLOps pipeline
 * [ ] Make sure all group members have an understanding about all parts of the project
-* [ ] Uploaded all your code to GitHub
+* [x] Uploaded all your code to GitHub
 
 ## Group information
 
@@ -129,7 +129,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
-s233219, s240661
+s233219, s242781, s232775, s240661
 
 
 ### Question 3
@@ -144,7 +144,9 @@ s233219, s240661
 >
 > Answer:
 
---- question 3 fill here ---
+In our project, we used the third-party framework *TensorFlow*. It is an open-source machine learning library that provides different tools for building, training and testing ML models. In our case, it enabled us to adapt the baseline implementation of the news recommender system (Ebnerd) provided for the RecSys Challenge by Ekstra Bladet (as we explained in our project description). By incorporating TensorFlow, we could train and fine-tune the model, benefiting from its robust support for multi-head attention layers. Additionally, this framework allowed us to experiment with different hyperparameters, specially after using the Weights & Biases tool. 
+
+Thanks to TensorFlow, we could optimize the model's performance and also made a faster pipeline and more reproducible. 
 
 
 ## Coding environment
@@ -217,7 +219,7 @@ In order to have code quality and formatting rules in our project, we used *Ruff
 >
 > Answer:
 
---- question 7 fill here ---
+We implemented a total of 8 tests using pytest to ensure the robustness and reliability of the machine learning pipeline, covering data, model, and training aspects. For data testing, we verified the dimensions of the train, test, and validation datasets, checked for missing or invalid values, and ensured correct formatting. On the model side, we tested that the model weights were imported correctly and that the model's performance surpassed an arbitrary threshold. For the training process, unit tests were conducted to ensure the model was created correctly, the data was properly loaded into the model, and the model was able to be trained successfully. 
 
 ### Question 8
 
@@ -497,7 +499,8 @@ We managed to write an API for our model using *FastAPI* and containerized it us
 >
 > Answer:
 
---- question 24 fill here ---
+We packed our API application into a Docker image and uploaded it to Google Artifact Registry, preparing it for cloud deployment. While we didn't run the API directly from a cloud-hosted instance, some of the needed steps to performe an actual deployment were achieved. However, we could test the API created locally to ensure that the model loaded correctly and accurately predicted the AUC for the data that the user imported. This setup ensured us that the API could be hosted on a cloud instance but a properly frontend could be useful. To invoke the service, we mainly used the default UI from FastAPI where we could upload the parquet data and then, the API gave back the resulting AUC. Moreover, it could be done through the terminal using the `/predict/` endpoint thanks to the command: `curl -X POST -F "file=path/to/the/ptest.parquet" http://127.0.0.1:8000/predict/`
+
 
 ### Question 25
 
@@ -595,6 +598,8 @@ We managed to write an API for our model using *FastAPI* and containerized it us
 
 We tried to implement as well an ONNX version of the model, for having the API running this model. However, given that our model is coded in Tensorflow, and that the instructions of the course are mainly based for Pytorch projects when regarding the ONNX, we had some troubles when obtaining the ONNX version. A similar problem happened when implementing the wandb framework to our model. 
 
+Another big challenge during the project was to integrate all the work that each of was doing at the same time. We needed a lot of comunication because some tasks depended on others that they maybe were performed by other team members. We are referring mainly with the Cloud, because at a certain point we all needed to be able to upload stuff that we did locally to the cloud.
+
 ### Question 31
 
 > **State the individual contributions of each team member. This is required information from DTU, because we need to**
@@ -610,4 +615,7 @@ We tried to implement as well an ONNX version of the model, for having the API r
 >
 > Answer:
 
---- question 31 fill here ---
+Student *s233219* was in charge of everything related to Docker, using it locally and also adding the files to the cloud. Moreover, the workflows related to check the construction of the Docker images and upload them to the cloud was their job. This student also worked with the API and everything related to it.
+
+
+All the team contributed with their own branches during the development. We all also write the report together.
