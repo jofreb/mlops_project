@@ -167,7 +167,7 @@ Thanks to TensorFlow, we could optimize the model's performance and also made a 
 >
 > Answer:
 
-In our project, we used requirements.txt to manage the dependencies. It is a text file which contains a list of all the packages that we have been using for doing the project. This file was generated automatically thanks to a package called *pipreqs*. 
+In our project, we used requirements.txt, requirements_dev.txt and requirements_test.txt to manage the dependencies. These are text files which contain a list of all the packages that we have been using for doing the project. The requirements.txt file was generated automatically thanks to a package called *pipreqs*. 
 
 Therefore, if a new member joins our team, the first needed step is to clone the repository and check the requirements.txt file. We also recommend to create a virtual environment to isolate dependencies. Afterwards, the new member should activate this new created environment and install all the dependencies using `pip install -r requirements.txt`. Thanks to this process, the new member's environment will mirror the project's dependencies.
 
@@ -178,10 +178,8 @@ Therefore, if a new member joins our team, the first needed step is to clone the
 >
 > Recommended answer length: 100-200 words
 >
-> Example:
-> *From the cookiecutter template we have filled out the ... , ... and ... folder. We have removed the ... folder*
-> *because we did not use any ... in our project. We have added an ... folder that contains ... for running our*
-> *experiments.*
+> From the cookiecutter template we have filled out the main folders that contain the main files of every machine learning project: folder that contain the main python files to run the model, dockerfiles folder, .github folder to define the workflows for github actions and tests. 
+We have added the following folders: wandb and .dvc to perform the data monitoring and data version control in google cloud.
 >
 > Answer:
 
@@ -264,7 +262,7 @@ Yes, our workflow involved multiples branches and pull requests. We have the mai
 >
 > Answer:
 
---- question 10 fill here ---
+We did make use of DVC for version control: we added a pointer into our Google Cloud data bucket to read the data from there instead to store it locally or in Github, which would be highly inefficient. Additionally, we implemented a data workflow that triggers every time we change anything in the data folder in the cloud. This is how we integrated continuously data versioning into our pipeline.
 
 ### Question 11
 
@@ -285,7 +283,7 @@ To ensure a comprehensive testing and try to keep code quality, we decided to st
 
 - *Docker Image CI*: it automates building and pushing Docker images to Google Cloud Artifact Registry, ensuring up-to-date deployment of the model and backend application with each change to the main branch.
 - *Check staged model*: it is triggered from wandb whenever there is a change in the model-weights uploaded in the platform. This workflow is defined in the file workflow_wandb.yaml. In short terms, the workflow provides as an output the information relative to the modification of the weights in wandb.
-- *DVC Workflow*: 
+- *DVC Workflow*: As mentioned in the previous question, we are using a workflow to ensure every time we change something into the data folder in the cloud bucket, it is well integrated in our pipeline and can run without errors. The data is now read from google cloud, and our local repositories can read it directly from the cloud as well. So there is no need to download it avery time.
 - *Test FastAPI API*: it ensures that the simple first API that we built works correctly providing feedback. 
 
 ## Running code and tracking experiments
@@ -327,7 +325,7 @@ We used an arg_parser, implemented in the train_wandb.py file, inside the src/nr
 >
 > Answer:
 
-When an experiment is run using the wandb training script (train_wandb.py), inside the wandb folder the experiment is registered authomatically. A folder is created, with the timestamp of the experiment as the name, as well as the identifier of the run for the wandb platform. Inside this folder the wandb infrastructure already creates a files folder, which then contains a config yaml file. Inside this yaml file we can find the value used for each hyperparameter, including as well other features, such as the system where the file has been executed. This way we can keep track of each of th experiments done. 
+When an experiment is run using the wandb training script (train_wandb.py), inside the wandb folder the experiment is registered authomatically. A folder is created, with the timestamp of the experiment as the name, as well as the identifier of the run for the wandb platform. Inside this folder the wandb infrastructure already creates a files folder, which then contains a config yaml file. Inside this yaml file we can find the value used for each hyperparameter, including as well other features, such as the system where the file has been executed. This way we can keep track of each of the experiments done. 
 
 I<br/>nside this folder, the weights of the model are also stored, in a .h5 file. We can also check the logging output of each case, seeing the evolution of the training and other logging events we added. Then, in the WANDB platform we can further analyze the results.
 <br/>To reproduce the experiment, one would have to call the train_wandb.py file, and include the hyperparameters specified in the config file, passing them as argparse arguments, as specified in the previous question. 
@@ -392,7 +390,7 @@ The key advantage of using Docker images is that each one contains all the neces
 >
 > Answer:
 
---- question 16 fill here ---
+When runing into bugs we could generally find them with the tracebacks provided by python. Other times, printing some variables in the python files was enough to find the errors. When none of these worked, we used the Python debugger extension from VS Code which allowed us to further debug our errors more successfully.
 
 ## Working in the cloud
 
@@ -409,7 +407,7 @@ The key advantage of using Docker images is that each one contains all the neces
 >
 > Answer:
 
---- question 17 fill here ---
+We used the following services: Compute Engine, Cloud Storage, Vertex AI, Artifact Registry, and IAM & Admin. Compute Engine is used for creating and managing virtual machines to run various workloads, providing flexibility and scalability for custom configurations. Cloud Storage is used for managing buckets to store and retrieve data, including files and objects. Vertex AI is used to run machine learning jobs, providing tools and managed services to develop, deploy, and monitor ML models. Artifact Registry is used to store and manage Docker containers, ensuring version control and integration with other Google Cloud services. IAM & Admin is used to manage user and service accounts, to secure access control and proper role assignment across all services.
 
 ### Question 18
 
@@ -424,7 +422,7 @@ The key advantage of using Docker images is that each one contains all the neces
 >
 > Answer:
 
---- question 18 fill here ---
+We did not use the GCP Compute Engine because we prefered VertexAI, a managed machine learning platform that simplifies the process of building, training, deploying, and managing ML models. With VertexAI, scaling the experiments is much better because you don't need to manually start, setup and stop a separate VM for each experiment.
 
 ### Question 19
 
@@ -433,7 +431,7 @@ The key advantage of using Docker images is that each one contains all the neces
 >
 > Answer:
 
---- question 19 fill here ---
+![alt text](figures/cloud_bucket.png)
 
 ### Question 20
 
@@ -442,7 +440,7 @@ The key advantage of using Docker images is that each one contains all the neces
 >
 > Answer:
 
---- question 20 fill here ---
+![alt text](figures/artifact_registry.png)
 
 ### Question 21
 
@@ -451,7 +449,7 @@ The key advantage of using Docker images is that each one contains all the neces
 >
 > Answer:
 
---- question 21 fill here ---
+![alt text](figures/cloud_build.png)
 
 ### Question 22
 
@@ -466,7 +464,7 @@ The key advantage of using Docker images is that each one contains all the neces
 >
 > Answer:
 
---- question 22 fill here ---
+We trained the model in Vertex AI by running a custom training job that executed a Docker container stored in Artifact Registry. The container contained the training script and dependencies, processed data from Cloud Storage, and saved outputs back to Cloud Storage.
 
 ## Deployment
 
@@ -530,7 +528,7 @@ We packed our API application into a Docker image and uploaded it to Google Arti
 >
 > Answer:
 
---- question 26 fill here ---
+We did not manage to implement monitoring. Monitoring would help us detect issues such as data drift, degraded performance, and unexpected behaviors in real time. It ensures our model remains reliable by triggering retraining or adjustments when anomalies like data drift or target drift occur. Additionally, monitoring classic metrics such as latency, error rates, and throughput would allow us to maintain the overall health of the application, ensuring its longevity and user satisfaction.
 
 ## Overall discussion of project
 
@@ -549,7 +547,7 @@ We packed our API application into a Docker image and uploaded it to Google Arti
 >
 > Answer:
 
---- question 27 fill here ---
+The credits used are shown in the picture ![alt text](figures/credits_used.png), totalling 12.04 kr. The service costing the most was the compute engine by far because it provides dedicated virtual machines with customizable resources like CPU, GPU, memory, and storage.
 
 ### Question 28
 
@@ -600,6 +598,8 @@ We tried to implement as well an ONNX version of the model, for having the API r
 
 Another big challenge during the project was to integrate all the work that each of was doing at the same time. We needed a lot of comunication because some tasks depended on others that they maybe were performed by other team members. We are referring mainly with the Cloud, because at a certain point we all needed to be able to upload stuff that we did locally to the cloud.
 
+Another big challenge was keeping up with all the contents of this short course as well as implementing all the tools in our project. This required an extremely intense three week period which was an exercise of hard work and persistence.
+
 ### Question 31
 
 > **State the individual contributions of each team member. This is required information from DTU, because we need to**
@@ -616,6 +616,8 @@ Another big challenge during the project was to integrate all the work that each
 > Answer:
 
 Student *s233219* was in charge of everything related to Docker, using it locally and also adding the files to the cloud. Moreover, the workflows related to check the construction of the Docker images and upload them to the cloud was their job. This student also worked with the API and everything related to it.
+
+Student *s232775* was in charge of the data version control and the managing of the google cloud account where all the services were run. This student made sure the team used all the tools required to scale the project in the cloud, and designed workflow tests integrated with the cloud through Github Secrets where we stored GCP's API key.
 
 
 All the team contributed with their own branches during the development. We all also write the report together.
