@@ -45,6 +45,10 @@ jobs:
       run: |
         dvc pull --no-run-cache
 
+    - name: Set PYTHONPATH
+      run: echo "::add-path::$GITHUB_WORKSPACE"
+      shell: bash
+
     - name: Check data statistics
       run: |
         python src/nrms_ml_ops/dataset_statistics.py "gs://project_mlops_bucket/data/processed/"
