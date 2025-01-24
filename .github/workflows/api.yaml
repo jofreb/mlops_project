@@ -27,12 +27,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install fastapi uvicorn httpx pytest tensorflow
-    
-    # Iniciar FastAPI
+
+    # Iniciar FastAPI (backend.py)
     - name: Start FastAPI app
-      working-directory: src/nrms_ml_ops
+      working-directory: src/nrms_ml_ops  # Cambia esto si el archivo backend.py está en otro directorio
       run: |
-        nohup uvicorn api:app --host 127.0.0.1 --port 8000 &
+        nohup uvicorn backend:app --host 127.0.0.1 --port 8000 &
       env:
         PYTHONUNBUFFERED: 1  
 
