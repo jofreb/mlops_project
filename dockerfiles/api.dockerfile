@@ -1,17 +1,25 @@
-# Change from latest to a specific version if your requirements.txt
-FROM python:3.11.11-slim AS base
+FROM python:3.11-slim
 
-RUN apt update && \
-    apt install --no-install-recommends -y build-essential gcc && \
-    apt clean && rm -rf /var/lib/apt/lists/*
+EXPOSE $PORT
 
-COPY src src/
-COPY requirements.txt requirements.txt
-COPY requirements_dev.txt requirements_dev.txt
-COPY README.md README.md
-COPY pyproject.toml pyproject.toml
+WORKDIR /app
 
-RUN pip install -r requirements.txt --no-cache-dir --verbose
-RUN pip install . --no-deps --no-cache-dir --verbose
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    software-properties-common \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["uvicorn", "src/my_project/api:app", "--host", "0.0.0.0", "--port", "8000"]
+RUN pip install fastapi
+RUN pip install pydantic
+RUN pip install uvicorn
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY src src
+
+# Add src to PYTHONPATH
+ENV PYTHONPATH="${PYTHONPATH}:/app/src"
+
+CMD exec uvicorn src.nrms_ml_ops.api:app --port $PORT --host 0.0.0.0 --workers 1
