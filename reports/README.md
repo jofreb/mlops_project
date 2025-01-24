@@ -129,7 +129,8 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
-s233219,
+s233219, s240661
+
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
@@ -281,8 +282,8 @@ Yes, our workflow involved multiples branches and pull requests. We have the mai
 To ensure a comprehensive testing and try to keep code quality, we decided to structure our continuous integration into workflows. In our case, we have four different ones:
 
 - *Docker Image CI*: it automates building and pushing Docker images to Google Cloud Artifact Registry, ensuring up-to-date deployment of the model and backend application with each change to the main branch.
-- *Check staged model*: 
-- *DVC Workflow*:
+- *Check staged model*: it is triggered from wandb whenever there is a change in the model-weights uploaded in the platform. This workflow is defined in the file workflow_wandb.yaml. In short terms, the workflow provides as an output the information relative to the modification of the weights in wandb.
+- *DVC Workflow*: 
 - *Test FastAPI API*: it ensures that the simple first API that we built works correctly providing feedback. 
 
 ## Running code and tracking experiments
