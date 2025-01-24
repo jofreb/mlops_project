@@ -1,56 +1,46 @@
-from transformers import AutoTokenizer, AutoModel
 from pathlib import Path
 import tensorflow as tf
 import datetime as dt
 import polars as pl
 import gc
 import os
-from pathlib import Path
 import sys
 import numpy as np
-import yaml
-
+from loguru import logger
 
 from utils._constants import (
     DEFAULT_HISTORY_ARTICLE_ID_COL,
     DEFAULT_CLICKED_ARTICLES_COL,
     DEFAULT_INVIEW_ARTICLES_COL,
     DEFAULT_IMPRESSION_ID_COL,
-    DEFAULT_SUBTITLE_COL,
-    DEFAULT_LABELS_COL,
-    DEFAULT_TITLE_COL,
     DEFAULT_USER_COL,
-    DEFAULT_IMPRESSION_TIMESTAMP_COL,
 )
 
-from utils._behaviors import (
-    create_binary_labels_column,
-    sampling_strategy_wu2019,
-    add_known_user_column,
-    add_prediction_scores,
-    truncate_history,
-)
-from evaluation import MetricEvaluator, AucScore, NdcgScore, MrrScore
-from utils._articles import convert_text2encoding_with_transformers
-from utils._polars import concat_str_columns, slice_join_dataframes
+import argparse
+
 from utils._articles import create_article_id_to_value_mapping
-from utils._nlp import get_transformers_word_embeddings
-from utils._python import write_submission_file, rank_predictions_by_score
 
 from dataloader import NRMSDataLoader
 from model_config import hparams_nrms
 from model import NRMSModel_docvec
 
-from typing import List, Dict, Any, Tuple, Optional, Union
-from datetime import datetime, timedelta
 
 import wandb
 from wandb.integration.keras import WandbCallback
 
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Train a model with specified hyperparameters")
+    parser.add_argument("--learning_rate", type=float, default=0.001, help="Learning rate")
+    parser.add_argument("--batch_size", type=int, default=32, help="Batch size")
+    parser.add_argument("--epochs", type=int, default=10, help="Number of epochs")
+    return parser.parse_args()
+
+
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
-
+args = parse_args()
 PATH = Path("./data/processed").expanduser()
 DUMP_DIR = PATH.joinpath("ebnerd_predictions")
 DUMP_DIR.mkdir(exist_ok=True, parents=True)
@@ -61,19 +51,19 @@ for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
 
 
-EPOCHS = 25
-embedding = 'xlm_roberta_base'
-BATCH_SIZE = 32
-learning_rate = 1e-4
-HISTORY_SIZE =  35
+EPOCHS = args.epochs
+embedding = "xlm_roberta_base"
+BATCH_SIZE = args.batch_size
+learning_rate = args.learning_rate
+HISTORY_SIZE = 35
 
 MODEL_NAME = f"NRMS-{DT_NOW}"
 
 # Create the folder, including any intermediate directories
 wandb.init(
-        project="nrms_mlops",
-        config={"lr": learning_rate, "batch_size": BATCH_SIZE, "epochs": EPOCHS},
-        sync_tensorboard=True
+    project="nrms_mlops",
+    config={"lr": learning_rate, "batch_size": BATCH_SIZE, "epochs": EPOCHS},
+    sync_tensorboard=True,
 )
 
 MODEL_WEIGHTS = f"./models/{MODEL_NAME}"
@@ -91,25 +81,29 @@ COLUMNS = [
 df_train = pl.read_parquet(PATH.joinpath("train.parquet"))
 
 
-df_validation= pl.read_parquet(PATH.joinpath("validation.parquet"))
-
+df_validation = pl.read_parquet(PATH.joinpath("validation.parquet"))
+logger.remove()  # Remove the default logger
+logger.add(sys.stdout, level="DEBUG")  # Add a new logger with WARNING level
+logger.debug("Data loaded")
 
 
 df_articles = pl.read_parquet(PATH.joinpath("articles.parquet"))
 
-precomputed_embeddings = pl.read_parquet(PATH.joinpath(embedding+".parquet"))
+precomputed_embeddings = pl.read_parquet(PATH.joinpath(embedding + ".parquet"))
 
-precomputed_embeddings = precomputed_embeddings.filter(precomputed_embeddings['article_id'].is_in(df_articles['article_id']))
-precomputed_embeddings = precomputed_embeddings.rename({'FacebookAI/xlm-roberta-base': 'embedding'})
+precomputed_embeddings = precomputed_embeddings.filter(
+    precomputed_embeddings["article_id"].is_in(df_articles["article_id"])
+)
+precomputed_embeddings = precomputed_embeddings.rename({"FacebookAI/xlm-roberta-base": "embedding"})
 
-pre_embs = np.array([precomputed_embeddings['embedding'][0]])
+pre_embs = np.array([precomputed_embeddings["embedding"][0]])
 
 article_mapping = create_article_id_to_value_mapping(
     df=precomputed_embeddings,
     value_col="embedding",  # Column containing precomputed embeddings
     article_col="article_id",  # Column containing article IDs
 )
- 
+logger.debug("Article Data created")
 
 train_dataloader = NRMSDataLoader(
     behaviors=df_train,
@@ -157,10 +151,10 @@ early_stopping = tf.keras.callbacks.EarlyStopping(
 
 # ModelCheckpoint:
 modelcheckpoint = tf.keras.callbacks.ModelCheckpoint(
-    filepath=MODEL_WEIGHTS+"nrms.weights.h5",
+    filepath=MODEL_WEIGHTS + "nrms.weights.h5",
     monitor="val_loss",
     mode="max",
-    save_best_only=False,
+    save_best_only=True,
     save_weights_only=True,
     verbose=1,
 )
@@ -174,15 +168,33 @@ lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(
     min_lr=learning_rate,
 )
 
+# Wandb Callback
 wandb_callback = WandbCallback(
-    monitor="val_auc", verbose=0, mode="auto", save_weights_only=(False),
-    log_weights=(False), log_gradients=(False), save_model=(True),
-    training_data=None, validation_data=None, labels=None, predictions=36,
-    generator=None, input_type=None, output_type=None, log_evaluation=(False),
-    validation_steps=None, class_colors=None, log_batch_frequency=None,
-    log_best_prefix="best_", save_graph=(True), validation_indexes=None,
-    validation_row_processor=None, prediction_row_processor=None,
-    infer_missing_processors=(True), log_evaluation_frequency=0,
+    monitor="val_auc",
+    verbose=0,
+    mode="auto",
+    save_weights_only=(False),
+    log_weights=(False),
+    log_gradients=(False),
+    save_model=(True),
+    training_data=None,
+    validation_data=None,
+    labels=None,
+    predictions=36,
+    generator=None,
+    input_type=None,
+    output_type=None,
+    log_evaluation=(False),
+    validation_steps=None,
+    class_colors=None,
+    log_batch_frequency=None,
+    log_best_prefix="best_",
+    save_graph=(True),
+    validation_indexes=None,
+    validation_row_processor=None,
+    prediction_row_processor=None,
+    infer_missing_processors=(True),
+    log_evaluation_frequency=0,
     compute_flops=(False),
 )
 
@@ -193,15 +205,30 @@ hist = model.model.fit(
     epochs=EPOCHS,
     callbacks=[tensorboard_callback, early_stopping, modelcheckpoint, lr_scheduler, wandb_callback],
 )
+logger.debug("Training finished")
 
-tr_loss = hist.history['loss']
-val_loss = hist.history['val_loss']
-losses = [tr_loss, val_loss]
+val_auc = hist.history["val_auc"][-1]
+val_loss = hist.history["val_loss"][-1]
+tr_auc = hist.history["auc"][-1]
+tr_loss = hist.history["loss"][-1]
+
 
 gc.collect()
 
-print("saving model...")
 model.model.save_weights(MODEL_WEIGHTS+"nrms.weights.h5")
 
 
-print("Correctly ended")
+model.model.save(MODEL_WEIGHTS + "nrms_model", save_format="tf")  # Saves in SavedModel format
+
+
+
+weights_artifact = wandb.Artifact(
+    name="nrms_model_weights",
+    type="model-weights",
+    description="NRMS model weights extracted from SavedModel.",
+)
+weights_artifact.add_file(MODEL_WEIGHTS + "nrms.weights.h5")
+wandb.log_artifact(weights_artifact)
+
+
+logger.debug("Correctly ended")

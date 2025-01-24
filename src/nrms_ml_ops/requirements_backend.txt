@@ -1,0 +1,20 @@
+# Framework and async utilities
+fastapi>=0.115.6
+anyio>=4.8.0
+uvicorn>=0.34.0
+
+# Data manipulation and file handling
+polars>=0.20.8
+PyYAML>=6.0.2
+
+# Machine learning and TensorFlow
+tensorflow>=2.13.0
+torch>=2.5.1
+transformers>=4.37.0
+
+# Google Cloud Storage
+google-cloud-storage>=2.19.0
+
+# # Additional utilities (if not included in your environment)
+# gc  # Built-in library, no installation required
+tqdm>=4.67.1

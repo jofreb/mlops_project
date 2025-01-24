@@ -5,7 +5,6 @@ import polars as pl
 import gc
 import os
 import numpy as np
-import argparse
 
 
 from utils._constants import (
@@ -30,7 +29,11 @@ from model import NRMSModel_docvec
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
-MODEL_WEIGHTS = Path("./models/NRMS-2025-01-23 16:10:47.711802nrms.weights.h5").expanduser()  # Set the model weights path directly
+
+MODEL_WEIGHTS = Path(
+    "./models/NRMS-2025-01-17 13:03:23.295214nrms.weights.h5"
+).expanduser()  # Set the model weights path directly
+
 
 # Ensure the model directory exists
 if not MODEL_WEIGHTS.exists():
@@ -114,9 +117,12 @@ print("loading model...")
 model.model.load_weights(str(MODEL_WEIGHTS))
 
 pred_test = model.scorer.predict(test_dataloader)
+
 df_test = add_prediction_scores(df_test, pred_test.tolist())
 
 aucsc = AucScore()
+print(len(df_test["labels"].to_list()))
+print(df_test["scores"].to_list())
 auc = aucsc.calculate(y_true=df_test["labels"].to_list(), y_pred=df_test["scores"].to_list())
 
 print(f"Test AUC: {auc}")
