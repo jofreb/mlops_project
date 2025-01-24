@@ -76,7 +76,7 @@ will check the repositories and the code to verify your answers.
 * [X] Write unit tests related to model construction and or model training (M16) **Edgar**
 * [X] Calculate the code coverage (M16) **Edgar**
 * [X] Get some continuous integration running on the GitHub repository (M17) **Edgar**
-* [ ] Add caching and multi-os/python/pytorch testing to your continuous integration (M17) 
+* [X] Add caching and multi-os/python/pytorch testing to your continuous integration (M17) 
 * [ ] Add a linting step to your continuous integration (M17) 
 * [ ] Add pre-commit hooks to your version control setup (M18)
 * [X] Add a continues workflow that triggers when data changes (M19) **Adri**
@@ -219,7 +219,7 @@ In order to have code quality and formatting rules in our project, we used *Ruff
 >
 > Answer:
 
-We implemented a total of eight tests using pytest to ensure the robustness and reliability of the machine learning pipeline, covering data, model, and training aspects. For data testing, we verified the dimensions of the train, test, and validation datasets, checked for missing or invalid values, and ensured correct formatting. On the model side, we tested that the model weights were imported correctly and that the model's performance surpassed an arbitrary threshold. For the training process, unit tests were conducted to ensure the model was created correctly, the data was properly loaded into the model, and the model was able to be trained successfully. 
+We implemented a total of 8 tests using pytest to ensure the robustness and reliability of the machine learning pipeline, covering data, model, and training aspects. For data testing, we verified the dimensions of the train, test, and validation datasets, checked for missing or invalid values, and ensured correct formatting. On the model side, we tested that the model weights were imported correctly and that the model's performance surpassed an arbitrary threshold. For the training process, unit tests were conducted to ensure the model was created correctly, the data was properly loaded into the model, and the model was able to be trained successfully. 
 
 ### Question 8
 
