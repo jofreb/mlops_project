@@ -38,3 +38,14 @@ jobs:
     - name: Push the Docker image to Google Artifact Registry
       run: |
         docker push europe-west1-docker.pkg.dev/mythic-music-447818-m3/mlops-project-containers/train:latest
+
+    # Build and push backend Docker image
+    - name: Build the Backend Docker image
+      run: |
+        docker build . \
+          --file dockerfiles/backend.dockerfile \
+          --tag europe-west1-docker.pkg.dev/mythic-music-447818-m3/mlops-project-containers/backend:latest
+
+    - name: Push the Backend Docker image to Google Artifact Registry
+      run: |
+        docker push europe-west1-docker.pkg.dev/mythic-music-447818-m3/mlops-project-containers/backend:latest

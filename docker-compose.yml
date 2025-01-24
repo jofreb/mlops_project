@@ -17,3 +17,16 @@ services:
       dockerfile: dockerfiles/evaluate.dockerfile
     volumes:
       - ./models:/models  # Mount models directory
+
+  backend:
+    image: backend:latest
+    build:
+      context: .
+      dockerfile: dockerfiles/backend.dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - train
+    volumes:
+      - ./models:/models  # Mount models directory
+      - ./src:/src
