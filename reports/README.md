@@ -109,7 +109,7 @@ will check the repositories and the code to verify your answers.
 * [ ] Revisit your initial project description. Did the project turn out as you wanted?
 * [ ] Create an architectural diagram over your MLOps pipeline
 * [ ] Make sure all group members have an understanding about all parts of the project
-* [ ] Uploaded all your code to GitHub
+* [x] Uploaded all your code to GitHub
 
 ## Group information
 
@@ -131,6 +131,7 @@ will check the repositories and the code to verify your answers.
 
 s233219, s242781, s232775, s240661
 
+
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
 > **did you choose to work with and did it help you complete the project?**
@@ -143,7 +144,9 @@ s233219, s242781, s232775, s240661
 >
 > Answer:
 
---- question 3 fill here ---
+In our project, we used the third-party framework *TensorFlow*. It is an open-source machine learning library that provides different tools for building, training and testing ML models. In our case, it enabled us to adapt the baseline implementation of the news recommender system (Ebnerd) provided for the RecSys Challenge by Ekstra Bladet (as we explained in our project description). By incorporating TensorFlow, we could train and fine-tune the model, benefiting from its robust support for multi-head attention layers. Additionally, this framework allowed us to experiment with different hyperparameters, specially after using the Weights & Biases tool. 
+
+Thanks to TensorFlow, we could optimize the model's performance and also made a faster pipeline and more reproducible. 
 
 
 ## Coding environment
@@ -165,6 +168,7 @@ s233219, s242781, s232775, s240661
 > Answer:
 
 In our project, we used requirements.txt to manage the dependencies. It is a text file which contains a list of all the packages that we have been using for doing the project. This file was generated automatically thanks to a package called *pipreqs*. 
+
 Therefore, if a new member joins our team, the first needed step is to clone the repository and check the requirements.txt file. We also recommend to create a virtual environment to isolate dependencies. Afterwards, the new member should activate this new created environment and install all the dependencies using `pip install -r requirements.txt`. Thanks to this process, the new member's environment will mirror the project's dependencies.
 
 ### Question 5
@@ -277,7 +281,12 @@ Yes, our workflow involved multiples branches and pull requests. We have the mai
 >
 > Answer:
 
---- question 11 fill here ---
+To ensure a comprehensive testing and try to keep code quality, we decided to structure our continuous integration into workflows. In our case, we have four different ones:
+
+- *Docker Image CI*: it automates building and pushing Docker images to Google Cloud Artifact Registry, ensuring up-to-date deployment of the model and backend application with each change to the main branch.
+- *Check staged model*: it is triggered from wandb whenever there is a change in the model-weights uploaded in the platform. This workflow is defined in the file workflow_wandb.yaml. In short terms, the workflow provides as an output the information relative to the modification of the weights in wandb.
+- *DVC Workflow*: 
+- *Test FastAPI API*: it ensures that the simple first API that we built works correctly providing feedback. 
 
 ## Running code and tracking experiments
 
@@ -297,6 +306,7 @@ Yes, our workflow involved multiples branches and pull requests. We have the mai
 > Answer:
 
 We used an arg_parser, implemented in the train_wandb.py file, inside the src/nrms_mlops folder. The code example of the argparse configuration for each experiment is the following:
+
 <br/>python src/nrms_ml_ops/train_wandb.py --batch_size=32 --epochs=20 --learning_rate=1e-05
 <br/>The argparser is used during the WANDB sweep, which is referenced later. During this sweep we use a config file, sweep.yaml, inside the folder configs, in which we specify the value of the hyperparameters to try. Basically we tried the following values:
 <br/>- Learning rate: 1e-5, 1e-4, 1e-3, 1e-2, 1e-1.
@@ -318,6 +328,7 @@ We used an arg_parser, implemented in the train_wandb.py file, inside the src/nr
 > Answer:
 
 When an experiment is run using the wandb training script (train_wandb.py), inside the wandb folder the experiment is registered authomatically. A folder is created, with the timestamp of the experiment as the name, as well as the identifier of the run for the wandb platform. Inside this folder the wandb infrastructure already creates a files folder, which then contains a config yaml file. Inside this yaml file we can find the value used for each hyperparameter, including as well other features, such as the system where the file has been executed. This way we can keep track of each of th experiments done. 
+
 I<br/>nside this folder, the weights of the model are also stored, in a .h5 file. We can also check the logging output of each case, seeing the evolution of the training and other logging events we added. Then, in the WANDB platform we can further analyze the results.
 <br/>To reproduce the experiment, one would have to call the train_wandb.py file, and include the hyperparameters specified in the config file, passing them as argparse arguments, as specified in the previous question. 
 
@@ -361,8 +372,11 @@ Basically, the validation AUC keeps increasing, until it reaches a maximum, then
 > Answer:
 
 To run our experiments, Docker was essential for creating containerized environments, ensuring consistency and reproducibility. We developed Docker images for both the training and evaluation stages. For running the training Docker image, we used Docker Compose to simplify the management of multi-container setups and automate the build and execution processes. This allowed us to define and run the training pipeline with a single configuration file, ensuring seamless orchestration. The following commands were used:
+
 `docker-compose build train` 
+
 `docker-compose up train`  
+
 The key advantage of using Docker images is that each one contains all the necessary dependencies, libraries, and configurations, ensuring uniformity across project executions. The train Dockerfile encapsulates the environment setup, providing a standardized and reproducible workflow for experimentation.
 
 ### Question 16
@@ -469,7 +483,7 @@ The key advantage of using Docker images is that each one contains all the neces
 >
 > Answer:
 
-
+We managed to write an API for our model using *FastAPI* and containerized it using Docker. The API allows users to upload a parquet file containing test data so that then is processed to generate predictions and inform the AUC. The model weights are loaded from Google Cloud Storage (GCS) and the FastAPI application is configured to handle file uploads, validate the file format, and make predictions using the model resulted from our training and uploaded in GCS. The Docker image installs the necessary dependencies and it is also optimized for efficient execution. Once the image is created, it is pushed to Google Artifact Registry through our CI pipeline ensuring seamless deployment and continuous integration of the code. In addition, we implemented an error handling procedure to ensure robust operation and easy scalability across environments. Since we couldn't implement any frontend for the API, to be able to execute it we used the UI of the FastAPI library adding `/docs/` after the uvicorn link generated.
 
 ### Question 24
 
@@ -485,7 +499,8 @@ The key advantage of using Docker images is that each one contains all the neces
 >
 > Answer:
 
---- question 24 fill here ---
+We packed our API application into a Docker image and uploaded it to Google Artifact Registry, preparing it for cloud deployment. While we didn't run the API directly from a cloud-hosted instance, some of the needed steps to performe an actual deployment were achieved. However, we could test the API created locally to ensure that the model loaded correctly and accurately predicted the AUC for the data that the user imported. This setup ensured us that the API could be hosted on a cloud instance but a properly frontend could be useful. To invoke the service, we mainly used the default UI from FastAPI where we could upload the parquet data and then, the API gave back the resulting AUC. Moreover, it could be done through the terminal using the `/predict/` endpoint thanks to the command: `curl -X POST -F "file=path/to/the/ptest.parquet" http://127.0.0.1:8000/predict/`
+
 
 ### Question 25
 
@@ -583,6 +598,8 @@ The key advantage of using Docker images is that each one contains all the neces
 
 We tried to implement as well an ONNX version of the model, for having the API running this model. However, given that our model is coded in Tensorflow, and that the instructions of the course are mainly based for Pytorch projects when regarding the ONNX, we had some troubles when obtaining the ONNX version. A similar problem happened when implementing the wandb framework to our model. 
 
+Another big challenge during the project was to integrate all the work that each of was doing at the same time. We needed a lot of comunication because some tasks depended on others that they maybe were performed by other team members. We are referring mainly with the Cloud, because at a certain point we all needed to be able to upload stuff that we did locally to the cloud.
+
 ### Question 31
 
 > **State the individual contributions of each team member. This is required information from DTU, because we need to**
@@ -598,4 +615,7 @@ We tried to implement as well an ONNX version of the model, for having the API r
 >
 > Answer:
 
---- question 31 fill here ---
+Student *s233219* was in charge of everything related to Docker, using it locally and also adding the files to the cloud. Moreover, the workflows related to check the construction of the Docker images and upload them to the cloud was their job. This student also worked with the API and everything related to it.
+
+
+All the team contributed with their own branches during the development. We all also write the report together.
