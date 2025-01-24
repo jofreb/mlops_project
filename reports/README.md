@@ -244,7 +244,7 @@ In order to have code quality and formatting rules in our project, we used *Ruff
 >
 > Answer:
 
---- question 9 fill here ---
+Yes, our workflow involved multiples branches and pull requests. We have the main branch where the whole principal code is and then, each of us created a branch for themselves so that we could work individually with our own tasks without afecting the others'. Additionally, since each member had several tasks, some of us created more feature branches to not mix them. Moreover, to protect the main branch, we set that no one could do `git push` directly from the main making the *pull requests* mandatory. Therefore, after each implementation, each of us was doing pull requests for code review and discussion before applying the changes into the ain. Thanks to this, we ensured a controllled and collaborative approach to incorporate new code.
 
 ### Question 10
 
