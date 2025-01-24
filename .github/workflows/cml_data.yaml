@@ -54,7 +54,8 @@ jobs:
       run: |
         python src/nrms_ml_ops/dataset_statistics.py "gs://project_mlops_bucket/data/processed/"
 
-    - name: Set GCP credentials
-      run: echo "${{ secrets.GCP_SA_KEY }}" > /credentials.json
-      shell: bash
+    - name: Auth with GCP
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
       
