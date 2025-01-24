@@ -93,7 +93,7 @@ def test_data_loading():
 
     df_articles = pl.read_parquet(os.path.join(_PATH_DATA,"articles.parquet"))
 
-    precomputed_embeddings = pl.read_parquet(PATH.joinpath(embedding + ".parquet"))
+    precomputed_embeddings = pl.read_parquet(os.path.join(_PATH_DATA,"xlm_roberta_base.parquet"))
 
     precomputed_embeddings = precomputed_embeddings.filter(
         precomputed_embeddings["article_id"].is_in(df_articles["article_id"])
@@ -223,7 +223,7 @@ def test_model_training():
     
     df_articles = pl.read_parquet(os.path.join(_PATH_DATA,"articles.parquet"))
 
-    precomputed_embeddings = pl.read_parquet(PATH.joinpath(embedding + ".parquet"))
+    precomputed_embeddings = pl.read_parquet(os.path.join(_PATH_DATA,"xlm_roberta_base.parquet"))
 
     precomputed_embeddings = precomputed_embeddings.filter(
         precomputed_embeddings["article_id"].is_in(df_articles["article_id"])
