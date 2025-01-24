@@ -5,7 +5,6 @@ import polars as pl
 import gc
 import os
 import numpy as np
-import argparse
 
 
 from utils._constants import (
@@ -31,6 +30,7 @@ from google.cloud import storage
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
+
 def download_blob(bucket_name, source_blob_name, destination_file_name):
     """Downloads a blob from the bucket."""
     storage_client = storage.Client()
@@ -38,6 +38,7 @@ def download_blob(bucket_name, source_blob_name, destination_file_name):
     blob = bucket.blob(source_blob_name)
     blob.download_to_filename(destination_file_name)
     print(f"Blob {source_blob_name} downloaded to {destination_file_name}.")
+
 
 # Define the model weights path
 MODEL_WEIGHTS_LOCAL = Path("/tmp/nrms.weights.h5")
@@ -80,7 +81,7 @@ COLUMNS = [
 
 df_test = pl.read_parquet(cloud_path + "test.parquet")
 
-df_articles = pl.read_parquet(cloud_path +"articles.parquet")
+df_articles = pl.read_parquet(cloud_path + "articles.parquet")
 
 precomputed_embeddings = pl.read_parquet(cloud_path + embedding + ".parquet")
 
