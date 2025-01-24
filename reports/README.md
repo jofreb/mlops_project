@@ -54,7 +54,7 @@ will check the repositories and the code to verify your answers.
 * [x] Create the initial file structure using cookiecutter with an appropriate template (M6)
 * [x] Fill out the `data.py` file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)
 * [x] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
-* [ ] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
+* [x] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
     are using (M2+M6)
 * [x] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
 * [ ] Do a bit of code typing and remember to document essential parts of your code (M7)
@@ -65,9 +65,9 @@ will check the repositories and the code to verify your answers.
 * [ ] Write one or multiple configurations files for your experiments (M11)
 * [ ] Used Hydra to load the configurations and manage your hyperparameters (M11)
 * [ ] Use profiling to optimize your code (M12)  
-* [ ] Use logging to log important events in your code (M14) **Jofre**
-* [ ] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14) **Jofre**
-* [ ] Consider running a hyperparameter optimization sweep (M14) **Jofre**
+* [X] Use logging to log important events in your code (M14) **Jofre**
+* [X] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14) **Jofre**
+* [X] Consider running a hyperparameter optimization sweep (M14) **Jofre**
 * [ ] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
 
 ### Week 2
@@ -80,13 +80,13 @@ will check the repositories and the code to verify your answers.
 * [ ] Add a linting step to your continuous integration (M17) 
 * [ ] Add pre-commit hooks to your version control setup (M18)
 * [X] Add a continues workflow that triggers when data changes (M19) **Adri**
-* [ ] Add a continues workflow that triggers when changes to the model registry is made (M19) **Jofre**
+* [X] Add a continues workflow that triggers when changes to the model registry is made (M19) **Jofre**
 * [X] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21) **Adri**
-* [ ] Create a trigger workflow for automatically building your docker images (M21) **Paula**
+* [x] Create a trigger workflow for automatically building your docker images (M21) **Paula**
 * [ ] Get your model training in GCP using either the Engine or Vertex AI (M21) **Adri**
-* [ ] Create a FastAPI application that can do inference using your model (M22) **Paula**
+* [x] Create a FastAPI application that can do inference using your model (M22) **Paula**
 * [ ] Deploy your model in GCP using either Functions or Run as the backend (M23) **Adri**
-* [ ] Write API tests for your application and setup continues integration for these (M24) **Edgar**
+* [x] Write API tests for your application and setup continues integration for these (M24) **Paula**
 * [ ] Load test your application (M24)
 * [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25) **Jofre**
 * [ ] Create a frontend for your API (M26)
@@ -118,7 +118,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 1 fill here ---
+73
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -129,7 +129,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 2 fill here ---
+s233219,
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
@@ -144,6 +144,7 @@ will check the repositories and the code to verify your answers.
 > Answer:
 
 --- question 3 fill here ---
+
 
 ## Coding environment
 
@@ -163,7 +164,8 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 4 fill here ---
+In our project, we used requirements.txt to manage the dependencies. It is a text file which contains a list of all the packages that we have been using for doing the project. This file was generated automatically thanks to a package called *pipreqs*. 
+Therefore, if a new member joins our team, the first needed step is to clone the repository and check the requirements.txt file. We also recommend to create a virtual environment to isolate dependencies. Afterwards, the new member should activate this new created environment and install all the dependencies using `pip install -r requirements.txt`. Thanks to this process, the new member's environment will mirror the project's dependencies.
 
 ### Question 5
 
@@ -194,7 +196,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 6 fill here ---
+In order to have code quality and formatting rules in our project, we used *Ruff*. It is important to have these rules while developing a project because, formatting enhaces readability making it easier for team members to understand and contribute on the codebase. Moreover, it ensures a uniform structure at the same time that reduces confusion and possible errors caused because of the styling. On the other hand, the code quality rules can help to identify potential issues in early stages so that the code meets specific standards and is less likely to have errors.
 
 ## Version control
 
@@ -243,7 +245,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 9 fill here ---
+Yes, our workflow involved multiples branches and pull requests. We have the main branch where the whole principal code is and then, each of us created a branch for themselves so that we could work individually with our own tasks without afecting the others'. Additionally, since each member had several tasks, some of us created more feature branches to not mix them. Moreover, to protect the main branch, we set that no one could do `git push` directly from the main making the *pull requests* mandatory. Therefore, after each implementation, each of us was doing pull requests for code review and discussion before applying the changes into the ain. Thanks to this, we ensured a controllled and collaborative approach to incorporate new code.
 
 ### Question 10
 
@@ -294,7 +296,13 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 12 fill here ---
+We used an arg_parser, implemented in the train_wandb.py file, inside the src/nrms_mlops folder. The code example of the argparse configuration for each experiment is the following:
+<br/>python src/nrms_ml_ops/train_wandb.py --batch_size=32 --epochs=20 --learning_rate=1e-05
+<br/>The argparser is used during the WANDB sweep, which is referenced later. During this sweep we use a config file, sweep.yaml, inside the folder configs, in which we specify the value of the hyperparameters to try. Basically we tried the following values:
+<br/>- Learning rate: 1e-5, 1e-4, 1e-3, 1e-2, 1e-1.
+<br/>- Batch size: 16, 32, 64
+<br/>- Epochs: 10, 15, 20, 25
+
 
 ### Question 13
 
@@ -309,7 +317,9 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 13 fill here ---
+When an experiment is run using the wandb training script (train_wandb.py), inside the wandb folder the experiment is registered authomatically. A folder is created, with the timestamp of the experiment as the name, as well as the identifier of the run for the wandb platform. Inside this folder the wandb infrastructure already creates a files folder, which then contains a config yaml file. Inside this yaml file we can find the value used for each hyperparameter, including as well other features, such as the system where the file has been executed. This way we can keep track of each of th experiments done. 
+I<br/>nside this folder, the weights of the model are also stored, in a .h5 file. We can also check the logging output of each case, seeing the evolution of the training and other logging events we added. Then, in the WANDB platform we can further analyze the results.
+<br/>To reproduce the experiment, one would have to call the train_wandb.py file, and include the hyperparameters specified in the config file, passing them as argparse arguments, as specified in the previous question. 
 
 ### Question 14
 
@@ -325,8 +335,17 @@ will check the repositories and the code to verify your answers.
 > *As seen in the second image we are also tracking ... and ...*
 >
 > Answer:
-
---- question 14 fill here ---
+We have done multiple runs, which can be analyzed in the wandb framework. Some first visualizations can be seen in the following image:
+![alt text](first_visual.png).
+<br/>In the previous image we can see that the training loss and AUC (epoch loss and AUC) keeps decreasing and improving respectively as the step is increased, as expected, meaning that the model is indeed learning from the data. 
+<br/>When looking at the Validation AUC we see a different result:
+![alt text](val_loss.png)
+Basically, the validation AUC keeps increasing, until it reaches a maximum, then three epochs later the training is stopped. This is due to the early stopping feature, which has a patience of 3 epochs, in order to avoid overfitting. 
+<br/>To find the optimal hyperparameters we realized a sweep based on the config file sweep.yaml, which we have already explained. Doing so, the results of the sweep can be seen in the following image:
+![alt text](sweep_wandb.png)
+<br/>The image is a nice visualization offered by wandb, where we can see the results yielded by the different combinations of hyperparameter, in terms of the validation AUC, which is the most important metric. Doing so, we can see that the best configuration corresponds to a Batch size of 32, 20 Epochs, and a learning rate of 0.001. The validation AUC obtained for this combination corresponds to 0.61. It might not seem a high value, however in the context of the project implemented it is indeed an accepted value, when looking at other available implementations in github. 
+<br/> We also logged the model weights as artifacts to the wandb platform, so that they can be downloaded and accessible. Actually, a registry was created based on these artifacts, which was then added in the continuous integration part of the project.
+<br/>We had some trouble when implementing, given that our base model is coded in Tensorflow, and the wandb instructions provided in the course are meant for Pytorch projects. However, we managed to implement it satisfactorily. 
 
 ### Question 15
 
@@ -341,7 +360,10 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 15 fill here ---
+To run our experiments, Docker was essential for creating containerized environments, ensuring consistency and reproducibility. We developed Docker images for both the training and evaluation stages. For running the training Docker image, we used Docker Compose to simplify the management of multi-container setups and automate the build and execution processes. This allowed us to define and run the training pipeline with a single configuration file, ensuring seamless orchestration. The following commands were used:
+`docker-compose build train` 
+`docker-compose up train`  
+The key advantage of using Docker images is that each one contains all the necessary dependencies, libraries, and configurations, ensuring uniformity across project executions. The train Dockerfile encapsulates the environment setup, providing a standardized and reproducible workflow for experimentation.
 
 ### Question 16
 
@@ -447,7 +469,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 23 fill here ---
+
 
 ### Question 24
 
@@ -559,7 +581,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 30 fill here ---
+We tried to implement as well an ONNX version of the model, for having the API running this model. However, given that our model is coded in Tensorflow, and that the instructions of the course are mainly based for Pytorch projects when regarding the ONNX, we had some troubles when obtaining the ONNX version. A similar problem happened when implementing the wandb framework to our model. 
 
 ### Question 31
 

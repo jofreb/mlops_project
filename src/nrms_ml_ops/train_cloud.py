@@ -22,12 +22,11 @@ from model_config import hparams_nrms
 from model import NRMSModel_docvec
 
 
-
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
 
-#PATH = Path("./data/processed").expanduser()
+# PATH = Path("./data/processed").expanduser()
 cloud_path = "gs://project_mlops_bucket/data/processed/"
 DUMP_DIR = Path(cloud_path + "ebnerd_predictions")
 DUMP_DIR.mkdir(exist_ok=True, parents=True)
@@ -60,13 +59,13 @@ COLUMNS = [
     DEFAULT_IMPRESSION_ID_COL,
 ]
 
-df_train = pl.read_parquet(cloud_path+"train.parquet")
+df_train = pl.read_parquet(cloud_path + "train.parquet")
 
 
-df_validation = pl.read_parquet(cloud_path+"validation.parquet")
+df_validation = pl.read_parquet(cloud_path + "validation.parquet")
 
 
-df_articles = pl.read_parquet(cloud_path+"articles.parquet")
+df_articles = pl.read_parquet(cloud_path + "articles.parquet")
 
 precomputed_embeddings = pl.read_parquet(cloud_path + embedding + ".parquet")
 
@@ -162,6 +161,39 @@ gc.collect()
 
 print("saving model...")
 model.model.save_weights(MODEL_WEIGHTS + "nrms.weights.h5")
+# model.model.save_weights("models/cloud/nrms.weights.h5")
+
+from google.cloud import storage
+import os
+import tempfile
+
+
+def save_weights_to_gcs(model, bucket_name, blob_name):
+    """
+    Save TensorFlow model weights directly to GCS.
+    """
+    # Ensure the blob_name ends with `.weights.h5`
+    if not blob_name.endswith(".weights.h5"):
+        raise ValueError("The blob name must end with `.weights.h5`.")
+
+    # Create a temporary file with `.weights.h5` extension
+    with tempfile.NamedTemporaryFile(suffix=".weights.h5") as temp_file:
+        # Save the weights to the temporary file
+        model.save_weights(temp_file.name)
+
+        # Upload the temporary file to GCS
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(blob_name)
+        blob.upload_from_filename(temp_file.name)
+
+        print(f"Weights successfully uploaded to gs://{bucket_name}/{blob_name}")
+
+
+# Save model weights to GCS
+bucket_name = "project_mlops_bucket"
+blob_name = "models/nrms.weights.h5"
+save_weights_to_gcs(model.model, bucket_name, blob_name)
 
 
 print("Correctly ended")

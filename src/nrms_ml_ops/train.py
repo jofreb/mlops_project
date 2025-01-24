@@ -22,7 +22,6 @@ from model_config import hparams_nrms
 from model import NRMSModel_docvec
 
 
-
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
