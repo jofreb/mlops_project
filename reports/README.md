@@ -165,6 +165,7 @@ s233219,
 > Answer:
 
 In our project, we used requirements.txt to manage the dependencies. It is a text file which contains a list of all the packages that we have been using for doing the project. This file was generated automatically thanks to a package called *pipreqs*. 
+
 Therefore, if a new member joins our team, the first needed step is to clone the repository and check the requirements.txt file. We also recommend to create a virtual environment to isolate dependencies. Afterwards, the new member should activate this new created environment and install all the dependencies using `pip install -r requirements.txt`. Thanks to this process, the new member's environment will mirror the project's dependencies.
 
 ### Question 5
@@ -277,7 +278,12 @@ Yes, our workflow involved multiples branches and pull requests. We have the mai
 >
 > Answer:
 
---- question 11 fill here ---
+To ensure a comprehensive testing and try to keep code quality, we decided to structure our continuous integration into workflows. In our case, we have four different ones:
+
+- *Docker Image CI*: it automates building and pushing Docker images to Google Cloud Artifact Registry, ensuring up-to-date deployment of the model and backend application with each change to the main branch.
+- *Check staged model*: 
+- *DVC Workflow*:
+- *Test FastAPI API*: it ensures that the simple first API that we built works correctly providing feedback. 
 
 ## Running code and tracking experiments
 
@@ -298,6 +304,7 @@ Yes, our workflow involved multiples branches and pull requests. We have the mai
 
 We used an arg_parser, implemented in the train_wandb.py file, inside the src/nrms_mlops folder. The code example of the argparse configuration for each experiment is the following:
 python src/nrms_ml_ops/train_wandb.py --batch_size=32 --epochs=20 --learning_rate=1e-05
+
 The argparser is used during the WANDB sweep, which is referenced later. During this sweep we use a config file, sweep.yaml, inside the folder configs, in which we specify the value of the hyperparameters to try. Basically we tried the following values:
 - Learning rate: 1e-5, 1e-4, 1e-3, 1e-2, 1e-1.
 - Batch size: 16, 32, 64
@@ -318,7 +325,9 @@ The argparser is used during the WANDB sweep, which is referenced later. During 
 > Answer:
 
 When an experiment is run using the wandb training script (train_wandb.py), inside the wandb folder the experiment is registered authomatically. A folder is created, with the timestamp of the experiment as the name, as well as the identifier of the run for the wandb platform. Inside this folder the wandb infrastructure already creates a files folder, which then contains a config yaml file. Inside this yaml file we can find the value used for each hyperparameter, including as well other features, such as the system where the file has been executed. This way we can keep track of each of th experiments done. 
+
 Inside this folder, the weights of the model are also stored, in a .h5 file. We can also check the logging output of each case, seeing the evolution of the training and other logging events we added. Then, in the WANDB platform we can further analyze the results.
+
 To reproduce the experiment, one would have to call the train_wandb.py file, and include the hyperparameters specified in the config file, passing them as argparse arguments, as specified in the previous question. 
 
 ### Question 14
@@ -352,8 +361,11 @@ To reproduce the experiment, one would have to call the train_wandb.py file, and
 > Answer:
 
 To run our experiments, Docker was essential for creating containerized environments, ensuring consistency and reproducibility. We developed Docker images for both the training and evaluation stages. For running the training Docker image, we used Docker Compose to simplify the management of multi-container setups and automate the build and execution processes. This allowed us to define and run the training pipeline with a single configuration file, ensuring seamless orchestration. The following commands were used:
+
 `docker-compose build train` 
+
 `docker-compose up train`  
+
 The key advantage of using Docker images is that each one contains all the necessary dependencies, libraries, and configurations, ensuring uniformity across project executions. The train Dockerfile encapsulates the environment setup, providing a standardized and reproducible workflow for experimentation.
 
 ### Question 16
@@ -460,7 +472,7 @@ The key advantage of using Docker images is that each one contains all the neces
 >
 > Answer:
 
---- question 23 fill here ---
+We managed to write an API for our model using *FastAPI* and containerized it using Docker. The API allows users to upload a parquet file containing test data so that then is processed to generate predictions and inform the AUC. The model weights are loaded from Google Cloud Storage (GCS) and the FastAPI application is configured to handle file uploads, validate the file format, and make predictions using the model resulted from our training and uploaded in GCS. The Docker image installs the necessary dependencies and it is also optimized for efficient execution. Once the image is created, it is pushed to Google Artifact Registry through our CI pipeline ensuring seamless deployment and continuous integration of the code. In addition, we implemented an error handling procedure to ensure robust operation and easy scalability across environments. Since we couldn't implement any frontend for the API, to be able to execute it we used the UI of the FastAPI library adding `/docs/` after the uvicorn link generated.
 
 ### Question 24
 
