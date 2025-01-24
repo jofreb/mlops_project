@@ -6,6 +6,7 @@ import gc
 import os
 import numpy as np
 
+from tests import _PATH_DATA
 
 from src.nrms_ml_ops.utils._constants import (
     DEFAULT_HISTORY_ARTICLE_ID_COL,
@@ -76,13 +77,13 @@ def test_data_loading():
         DEFAULT_IMPRESSION_ID_COL,
     ]
     
-    df_train = pl.read_parquet(PATH.joinpath("train.parquet"))
+    df_train = pl.read_parquet(os.path.join(_PATH_DATA,"train.parquet"))
     
     #check df_train dimensions
     if df_train.shape[0] == 0:
         raise ValueError("Train dataframe is empty")
 
-    df_validation = pl.read_parquet(PATH.joinpath("validation.parquet"))
+    df_validation = pl.read_parquet(os.path.join(_PATH_DATA,"validation.parquet"))
     #check df_validation dimensions
     if df_validation.shape[0] == 0:
         raise ValueError("Validation dataframe is empty")
@@ -90,7 +91,7 @@ def test_data_loading():
     if len(df_train.shape) != len(df_validation.shape):
         raise ValueError("Train and validation dataframes have different shapes")
 
-    df_articles = pl.read_parquet(PATH.joinpath("articles.parquet"))
+    df_articles = pl.read_parquet(os.path.join(_PATH_DATA,"articles.parquet"))
 
     precomputed_embeddings = pl.read_parquet(PATH.joinpath(embedding + ".parquet"))
 
@@ -217,10 +218,10 @@ def test_model_training():
         DEFAULT_IMPRESSION_ID_COL,
     ]
     
-    df_train = pl.read_parquet(PATH.joinpath("train.parquet"))
-    df_validation = pl.read_parquet(PATH.joinpath("validation.parquet"))
+    df_train = pl.read_parquet(os.path.join(_PATH_DATA,"train.parquet"))
+    df_validation = pl.read_parquet(os.path.join(_PATH_DATA,"validation.parquet"))
     
-    df_articles = pl.read_parquet(PATH.joinpath("articles.parquet"))
+    df_articles = pl.read_parquet(os.path.join(_PATH_DATA,"articles.parquet"))
 
     precomputed_embeddings = pl.read_parquet(PATH.joinpath(embedding + ".parquet"))
 
