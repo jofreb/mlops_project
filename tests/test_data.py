@@ -1,3 +1,4 @@
+
 #from torch.utils.data import Dataset
 import polars as pl
 from tests import _PATH_DATA
@@ -25,6 +26,7 @@ def test_dataset_missing_values():
     train = pl.read_parquet(path_data.joinpath("train.parquet"))
     test = pl.read_parquet(path_data.joinpath("test.parquet"))
     validation = pl.read_parquet(path_data.joinpath("validation.parquet"))
+
     assert train.null_count().sum_horizontal()[0] == 0
     assert test.null_count().sum_horizontal()[0] == 0
     assert validation.null_count().sum_horizontal()[0] == 0  
@@ -39,3 +41,4 @@ def test_dataset_columns():
     assert train.columns == ['user_id', 'article_id_fixed', 'article_ids_inview', 'article_ids_clicked', 'impression_id', 'labels']
     assert test.columns == ['user_id', 'article_id_fixed', 'article_ids_inview', 'article_ids_clicked', 'impression_id', 'labels']
     assert validation.columns == ['user_id', 'article_id_fixed', 'article_ids_inview', 'article_ids_clicked', 'impression_id', 'labels']  
+
