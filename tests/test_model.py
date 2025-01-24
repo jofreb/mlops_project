@@ -1,7 +1,4 @@
 # write a test that checks that from a input dataset, the output dataset has the correct dimensions
-import polars as pl
-from tests import _PATH_DATA
-from pathlib import Path
 
 # def test_model_output_dimensions():
 #     """Test that the model output has the correct dimensions."""

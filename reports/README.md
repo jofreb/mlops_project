@@ -118,7 +118,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 1 fill here ---
+73
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -129,7 +129,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 2 fill here ---
+s233219,
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
@@ -164,7 +164,8 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 4 fill here ---
+In our project, we used requirements.txt to manage the dependencies. It is a text file which contains a list of all the packages that we have been using for doing the project. This file was generated automatically thanks to a package called *pipreqs*. 
+Therefore, if a new member joins our team, the first needed step is to clone the repository and check the requirements.txt file. We also recommend to create a virtual environment to isolate dependencies. Afterwards, the new member should activate this new created environment and install all the dependencies using `pip install -r requirements.txt`. Thanks to this process, the new member's environment will mirror the project's dependencies.
 
 ### Question 5
 
@@ -195,7 +196,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 6 fill here ---
+In order to have code quality and formatting rules in our project, we used *Ruff*. It is important to have these rules while developing a project because, formatting enhaces readability making it easier for team members to understand and contribute on the codebase. Moreover, it ensures a uniform structure at the same time that reduces confusion and possible errors caused because of the styling. On the other hand, the code quality rules can help to identify potential issues in early stages so that the code meets specific standards and is less likely to have errors.
 
 ## Version control
 
@@ -244,7 +245,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 9 fill here ---
+Yes, our workflow involved multiples branches and pull requests. We have the main branch where the whole principal code is and then, each of us created a branch for themselves so that we could work individually with our own tasks without afecting the others'. Additionally, since each member had several tasks, some of us created more feature branches to not mix them. Moreover, to protect the main branch, we set that no one could do `git push` directly from the main making the *pull requests* mandatory. Therefore, after each implementation, each of us was doing pull requests for code review and discussion before applying the changes into the ain. Thanks to this, we ensured a controllled and collaborative approach to incorporate new code.
 
 ### Question 10
 
