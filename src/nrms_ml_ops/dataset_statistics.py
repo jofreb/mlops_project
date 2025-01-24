@@ -3,7 +3,6 @@ import polars as pl
 import typer
 
 
-import polars as pl
 from dataloader import NRMSDataLoader
 from utils._constants import DEFAULT_HISTORY_ARTICLE_ID_COL, DEFAULT_LABELS_COL, DEFAULT_INVIEW_ARTICLES_COL
 from utils._articles import create_article_id_to_value_mapping
