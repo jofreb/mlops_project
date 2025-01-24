@@ -163,7 +163,7 @@ s233219,
 >
 > Answer:
 
---- question 4 fill here ---
+In our project, we used requirements.txt to manage the dependencies. It is a text file which contains a list of all the packages that we have been using for doing the project. This file was generated automatically thanks to a package called *pipreqs*. 
 
 ### Question 5
 
