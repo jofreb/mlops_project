@@ -3,10 +3,10 @@ from typing import Iterable
 import numpy as np
 import json
 
-from evaluation.utils import convert_to_binary
-from evaluation.protocols import Metric
+from src.nrms_ml_ops.evaluation.utils import convert_to_binary
+from src.nrms_ml_ops.evaluation.protocols import Metric
 
-from evaluation.metrics import (
+from src.nrms_ml_ops.evaluation.metrics import (
     mean_squared_error,
     accuracy_score,
     roc_auc_score,

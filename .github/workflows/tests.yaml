@@ -1,0 +1,43 @@
+name: "Run tests"
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    # continue testing even if one of the jobs fails
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.11]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.11
+        cache: 'pip' # caching pip dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements_tests.txt
+    - name: Auth with GCP
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+    - name: Test with pytest
+      run: |
+        pytest -v tests/
+    - name: Generate Coverage Report
+      run: |
+        pip install coverage
+        coverage run -m pytest tests/
+        coverage report -m
