@@ -8,6 +8,7 @@ polars>=0.20.8
 
 # Machine learning and TensorFlow
 tensorflow>=2.13.0
+torch>=2.5.1
 
 # Google Cloud Storage
 google-cloud-storage>=2.19.0
