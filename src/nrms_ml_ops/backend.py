@@ -31,6 +31,7 @@ MODEL = None
 ARTICLE_MAPPING = None
 TEST_DATALOADER = None
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize and clean up resources."""
@@ -99,12 +100,15 @@ async def lifespan(app: FastAPI):
     del ARTICLE_MAPPING
     del TEST_DATALOADER
 
+
 app = FastAPI(lifespan=lifespan)
+
 
 @app.get("/")
 async def root():
     """Root endpoint."""
     return {"message": "Welcome to the NRMS prediction API!"}
+
 
 @app.post("/predict/")
 async def predict_behavior(file: UploadFile = File(...)):
@@ -116,11 +120,11 @@ async def predict_behavior(file: UploadFile = File(...)):
 
         # Define the temporary file path
         temp_file_path = Path(f"/tmp/{file.filename}")
-        
+
         # Write the file contents to disk
         async with await anyio.open_file(temp_file_path, "wb") as f:
             await f.write(contents)  # Use 'await' here to properly write contents
-        
+
         # Check if the saved file is valid
         print(f"File size: {temp_file_path.stat().st_size}")
         if temp_file_path.stat().st_size < 12:
