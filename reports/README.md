@@ -72,9 +72,9 @@ will check the repositories and the code to verify your answers.
 
 ### Week 2
 
-* [ ] Write unit tests related to the data part of your code (M16) **Edgar**
-* [ ] Write unit tests related to model construction and or model training (M16) **Edgar**
-* [ ] Calculate the code coverage (M16) **Edgar**
+* [X] Write unit tests related to the data part of your code (M16) **Edgar**
+* [X] Write unit tests related to model construction and or model training (M16) **Edgar**
+* [X] Calculate the code coverage (M16) **Edgar**
 * [ ] Get some continuous integration running on the GitHub repository (M17) **Edgar**
 * [ ] Add caching and multi-os/python/pytorch testing to your continuous integration (M17) 
 * [ ] Add a linting step to your continuous integration (M17) 
@@ -129,7 +129,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
-s233219,
+s233219, s242781, s232775, s240661
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
