@@ -76,7 +76,7 @@ will check the repositories and the code to verify your answers.
 * [X] Write unit tests related to model construction and or model training (M16) **Edgar**
 * [X] Calculate the code coverage (M16) **Edgar**
 * [X] Get some continuous integration running on the GitHub repository (M17) **Edgar**
-* [X] Add caching and multi-os/python/pytorch testing to your continuous integration (M17) 
+* [X] Add caching and multi-os/python/pytorch testing to your continuous integration (M17) **Edgar**
 * [ ] Add a linting step to your continuous integration (M17) 
 * [ ] Add pre-commit hooks to your version control setup (M18)
 * [X] Add a continues workflow that triggers when data changes (M19) **Adri**
