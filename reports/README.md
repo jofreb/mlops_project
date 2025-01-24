@@ -109,7 +109,7 @@ will check the repositories and the code to verify your answers.
 * [ ] Revisit your initial project description. Did the project turn out as you wanted?
 * [ ] Create an architectural diagram over your MLOps pipeline
 * [ ] Make sure all group members have an understanding about all parts of the project
-* [ ] Uploaded all your code to GitHub
+* [x] Uploaded all your code to GitHub
 
 ## Group information
 
@@ -144,7 +144,9 @@ s233219, s240661
 >
 > Answer:
 
---- question 3 fill here ---
+In our project, we used the third-party framework *TensorFlow*. It is an open-source machine learning library that provides different tools for building, training and testing ML models. In our case, it enabled us to adapt the baseline implementation of the news recommender system (Ebnerd) provided for the RecSys Challenge by Ekstra Bladet (as we explained in our project description). By incorporating TensorFlow, we could train and fine-tune the model, benefiting from its robust support for multi-head attention layers. Additionally, this framework allowed us to experiment with different hyperparameters, specially after using the Weights & Biases tool. 
+
+Thanks to TensorFlow, we could optimize the model's performance and also made a faster pipeline and more reproducible. 
 
 
 ## Coding environment
