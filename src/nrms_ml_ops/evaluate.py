@@ -30,14 +30,14 @@ from model import NRMSModel_docvec
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
-MODEL_WEIGHTS = Path("/Users/paulagambus/Documents/DTU/Ml_Ops/mlops_project/models/NRMS-2025-01-17 13:03:23.295214nrms.weights.h5").expanduser()  # Set the model weights path directly
+MODEL_WEIGHTS = Path("./models/NRMS-2025-01-17 13:03:23.295214nrms.weights.h5").expanduser()  # Set the model weights path directly
 
 # Ensure the model directory exists
 if not MODEL_WEIGHTS.exists():
     print(f"Error: The model path {MODEL_WEIGHTS} does not exist.")
     exit(1)
 
-PATH = Path("/Users/paulagambus/Documents/DTU/Ml_Ops/mlops_project/data/processed").expanduser()
+PATH = Path("./data/processed").expanduser()
 DUMP_DIR = PATH.joinpath("ebnerd_predictions")
 DUMP_DIR.mkdir(exist_ok=True, parents=True)
 DT_NOW = dt.datetime.now()
