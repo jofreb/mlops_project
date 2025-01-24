@@ -10,6 +10,7 @@ PyYAML>=6.0.2
 # Machine learning and TensorFlow
 tensorflow>=2.13.0
 torch>=2.5.1
+transformers>=4.37.0
 
 # Google Cloud Storage
 google-cloud-storage>=2.19.0
