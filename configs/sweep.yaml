@@ -1,5 +1,6 @@
 program: src/nrms_ml_ops/train_wandb.py
 name: sweepdemo
+
 project: nrms_mlops  
 entity: jofreb-danmarks-tekniske-universitet-dtu  
 method: bayes
@@ -13,4 +14,5 @@ parameters:
         values: [16, 32, 64]
     epochs:
         values: [10, 15, 20, 25]
+
 run_cap: 10

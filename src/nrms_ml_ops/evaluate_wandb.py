@@ -46,6 +46,7 @@ from typing import List, Dict, Any, Tuple, Optional, Union
 from datetime import datetime, timedelta
 
 import wandb
+
 run = wandb.init()
 artifact = run.use_artifact('jofreb-danmarks-tekniske-universitet-dtu/nrms_mlops/nrms_model_weights:v0', type='model-weights')
 artifact_dir = artifact.download("./models/wandb")
@@ -130,6 +131,7 @@ gc.collect()
 
 print("loading model...")
 model.model.load_weights("models/wandb/NRMS-2025-01-23 10:24:57.979023nrms.weights.h5")
+
 
 
 pred_test = model.scorer.predict(test_dataloader)

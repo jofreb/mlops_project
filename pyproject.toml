@@ -5,22 +5,23 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "nrms_ml_ops"
 version = "0.0.1"
-description = "This is the cookiecutter template we\u0027ll use for our dtu mlops project"
+description = "This is the cookiecutter template we'll use for our dtu mlops project"
 authors = [
   { name = "adria", email = "your@email.com" },
 ]
 
-[project.scripts]
-train = "nrms_ml_ops.train:main"
+readme = "README.md"
+requires-python = ">=3.11.11"
+dynamic = ["dependencies", "optional-dependencies"]
 
 keywords = ["machine learning", "MLOps"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Programming Language :: Python :: 3",
 ]
-readme = "README.md"
-requires-python = ">=3.11.11"
-dynamic = ["dependencies", "optional-dependencies"]
+
+[project.scripts]
+train = "nrms_ml_ops.train:main"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
