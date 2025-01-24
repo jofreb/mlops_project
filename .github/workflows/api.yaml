@@ -32,7 +32,7 @@ jobs:
     - name: Start FastAPI app
       working-directory: src/nrms_ml_ops
       run: |
-        nohup uvicorn api:app --host 127.0.0.1 --port 8000 &
+        nohup uvicorn simple-api:app --host 127.0.0.1 --port 8000 &
       env:
         PYTHONUNBUFFERED: 1  
 
