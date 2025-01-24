@@ -72,10 +72,10 @@ will check the repositories and the code to verify your answers.
 
 ### Week 2
 
-* [ ] Write unit tests related to the data part of your code (M16) **Edgar**
-* [ ] Write unit tests related to model construction and or model training (M16) **Edgar**
-* [ ] Calculate the code coverage (M16) **Edgar**
-* [ ] Get some continuous integration running on the GitHub repository (M17) **Edgar**
+* [X] Write unit tests related to the data part of your code (M16) **Edgar**
+* [X] Write unit tests related to model construction and or model training (M16) **Edgar**
+* [X] Calculate the code coverage (M16) **Edgar**
+* [X] Get some continuous integration running on the GitHub repository (M17) **Edgar**
 * [ ] Add caching and multi-os/python/pytorch testing to your continuous integration (M17) 
 * [ ] Add a linting step to your continuous integration (M17) 
 * [ ] Add pre-commit hooks to your version control setup (M18)
@@ -83,7 +83,7 @@ will check the repositories and the code to verify your answers.
 * [X] Add a continues workflow that triggers when changes to the model registry is made (M19) **Jofre**
 * [X] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21) **Adri**
 * [x] Create a trigger workflow for automatically building your docker images (M21) **Paula**
-* [ ] Get your model training in GCP using either the Engine or Vertex AI (M21) **Adri**
+* [X] Get your model training in GCP using either the Engine or Vertex AI (M21) **Adri**
 * [x] Create a FastAPI application that can do inference using your model (M22) **Paula**
 * [ ] Deploy your model in GCP using either Functions or Run as the backend (M23) **Adri**
 * [x] Write API tests for your application and setup continues integration for these (M24) **Paula**
@@ -129,7 +129,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
-s233219, s240661
+s233219, s242781, s232775, s240661
 
 
 ### Question 3
