@@ -195,7 +195,7 @@ Therefore, if a new member joins our team, the first needed step is to clone the
 >
 > Answer:
 
---- question 6 fill here ---
+In order to have code quality and formatting rules in our project, we used *Ruff*. It is important to have these rules while developing a project because, formatting enhaces readability making it easier for team members to understand and contribute on the codebase. Moreover, it ensures a uniform structure at the same time that reduces confusion and possible errors caused because of the styling. On the other hand, the code quality rules can help to identify potential issues in early stages so that the code meets specific standards and is less likely to have errors.
 
 ## Version control
 
