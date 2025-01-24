@@ -115,9 +115,12 @@ print("loading model...")
 model.model.load_weights(str(MODEL_WEIGHTS))
 
 pred_test = model.scorer.predict(test_dataloader)
+
 df_test = add_prediction_scores(df_test, pred_test.tolist())
 
 aucsc = AucScore()
+print(len(df_test["labels"].to_list()))
+print(df_test["scores"].to_list())
 auc = aucsc.calculate(y_true=df_test["labels"].to_list(), y_pred=df_test["scores"].to_list())
 
 print(f"Test AUC: {auc}")

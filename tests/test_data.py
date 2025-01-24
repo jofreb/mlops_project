@@ -27,6 +27,7 @@ def test_dataset_missing_values():
     train = pl.read_parquet(path_data.joinpath("train.parquet"))
     test = pl.read_parquet(path_data.joinpath("test.parquet"))
     validation = pl.read_parquet(path_data.joinpath("validation.parquet"))
+
     assert train.null_count().sum_horizontal()[0] == 0
     assert test.null_count().sum_horizontal()[0] == 0
     assert validation.null_count().sum_horizontal()[0] == 0
