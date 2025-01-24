@@ -596,6 +596,8 @@ We packed our API application into a Docker image and uploaded it to Google Arti
 
 We tried to implement as well an ONNX version of the model, for having the API running this model. However, given that our model is coded in Tensorflow, and that the instructions of the course are mainly based for Pytorch projects when regarding the ONNX, we had some troubles when obtaining the ONNX version. A similar problem happened when implementing the wandb framework to our model. 
 
+Another big challenge during the project was to integrate all the work that each of was doing at the same time. We needed a lot of comunication because some tasks depended on others that they maybe were performed by other team members. We are referring mainly with the Cloud, because at a certain point we all needed to be able to upload stuff that we did locally to the cloud.
+
 ### Question 31
 
 > **State the individual contributions of each team member. This is required information from DTU, because we need to**
@@ -611,4 +613,7 @@ We tried to implement as well an ONNX version of the model, for having the API r
 >
 > Answer:
 
---- question 31 fill here ---
+Student *s233219* was in charge of everything related to Docker, using it locally and also adding the files to the cloud. Moreover, the workflows related to check the construction of the Docker images and upload them to the cloud was their job. This student also worked with the API and everything related to it.
+
+
+All the team contributed with their own branches during the development. We all also write the report together.
