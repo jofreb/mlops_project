@@ -1,18 +1,16 @@
 program: src/nrms_ml_ops/train_wandb.py
 name: sweepdemo
-project: nrms_mlops  # change this
-entity: jofreb-danmarks-tekniske-universitet-dtu  # change this
+project: nrms_mlops  
+entity: jofreb-danmarks-tekniske-universitet-dtu  
 method: bayes
 metric:
     goal: maximize
     name: val_auc
 parameters:
     learning_rate:
-        min: 0.00001
-        max: 0.1
-        distribution: log_uniform_values
+        values: [0.00001, 0.0001, 0.001, 0.01, 0.1]
     batch_size:
         values: [16, 32, 64]
     epochs:
-        values: [5, 10, 15, 20, 25]
+        values: [10, 15, 20, 25]
 run_cap: 10
