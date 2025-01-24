@@ -1,0 +1,64 @@
+name: "Run tests TF"
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+
+    # Run tests on multiple OS platforms (Ubuntu, Windows, and macOS)
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: [3.11]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    # Cache Python dependencies to speed up workflow
+    - name: Cache Python dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/pip
+          ~/.pip-cache
+        key: ${{ runner.os }}-python-${{ matrix.python-version }}-dependencies-${{ hashFiles('**/requirements*.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-python-${{ matrix.python-version }}-dependencies-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements_tests.txt
+
+    # Optionally, cache TensorFlow dependencies if large size is a concern (may not always be needed)
+    - name: Cache TensorFlow package
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-tensorflow-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-tensorflow-
+
+    # Authenticate with GCP (if using GCP services in tests)
+    - name: Auth with GCP
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Test with pytest
+      run: |
+        pytest -v tests/
