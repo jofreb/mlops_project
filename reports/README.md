@@ -233,7 +233,9 @@ We implemented a total of 8 tests using pytest to ensure the robustness and reli
 > *code and even if we were then...*
 >
 > Answer:
+
 The total code coverage we obtained is 52%. Even if our code had a coverage of 100% (or close to it), we would not necessarily trust it to be error-free. Code coverage measures the extent to which the code is executed during testing, but it does not guarantee the absence of bugs. High code coverage ensures that most parts of the code are tested, but it does not account for the quality and comprehensiveness of the tests themselves. Therefore, while high code coverage is desirable, it should be supported by comprehensive and meticulous designed tests to enhance confidence in the code's dependability.
+
 
 ### Question 9
 
