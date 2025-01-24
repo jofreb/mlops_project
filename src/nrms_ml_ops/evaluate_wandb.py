@@ -45,10 +45,10 @@ for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
 
 
-embedding = 'xlm_roberta_base'
+embedding = "xlm_roberta_base"
 BATCH_SIZE = 32
 learning_rate = 1e-4
-HISTORY_SIZE =  35
+HISTORY_SIZE = 35
 MODEL_NAME = "NRMS-2025-01-13 15:54:33.945585"
 MODEL_WEIGHTS = f"./models/{MODEL_NAME}"
 Path(MODEL_WEIGHTS).mkdir(parents=True, exist_ok=True)
@@ -67,12 +67,14 @@ df_test = pl.read_parquet(PATH.joinpath("test.parquet"))
 
 df_articles = pl.read_parquet(PATH.joinpath("articles.parquet"))
 
-precomputed_embeddings = pl.read_parquet(PATH.joinpath(embedding+".parquet"))
+precomputed_embeddings = pl.read_parquet(PATH.joinpath(embedding + ".parquet"))
 
-precomputed_embeddings = precomputed_embeddings.filter(precomputed_embeddings['article_id'].is_in(df_articles['article_id']))
-precomputed_embeddings = precomputed_embeddings.rename({'FacebookAI/xlm-roberta-base': 'embedding'})
+precomputed_embeddings = precomputed_embeddings.filter(
+    precomputed_embeddings["article_id"].is_in(df_articles["article_id"])
+)
+precomputed_embeddings = precomputed_embeddings.rename({"FacebookAI/xlm-roberta-base": "embedding"})
 
-pre_embs = np.array([precomputed_embeddings['embedding'][0]])
+pre_embs = np.array([precomputed_embeddings["embedding"][0]])
 
 article_mapping = create_article_id_to_value_mapping(
     df=precomputed_embeddings,

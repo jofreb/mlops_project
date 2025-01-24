@@ -3,6 +3,7 @@ import os
 import time
 from my_project.models import MyModel
 
+
 def load_model(artifact):
     api = wandb.Api(
         api_key=os.getenv("WANDB_API_KEY"),
@@ -12,6 +13,7 @@ def load_model(artifact):
     artifact.download(root=logdir)
     file_name = artifact.files()[0].name
     return MyModel.load_from_checkpoint(f"{logdir}/{file_name}")
+
 
 def test_model_speed():
     model = load_model(os.getenv("MODEL_NAME"))

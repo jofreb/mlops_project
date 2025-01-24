@@ -29,7 +29,9 @@ from model import NRMSModel_docvec
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
-MODEL_WEIGHTS = Path("./models/NRMS-2025-01-17 13:03:23.295214nrms.weights.h5").expanduser()  # Set the model weights path directly
+MODEL_WEIGHTS = Path(
+    "./models/NRMS-2025-01-17 13:03:23.295214nrms.weights.h5"
+).expanduser()  # Set the model weights path directly
 
 # Ensure the model directory exists
 if not MODEL_WEIGHTS.exists():
