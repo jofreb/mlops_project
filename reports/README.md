@@ -145,6 +145,7 @@ will check the repositories and the code to verify your answers.
 
 --- question 3 fill here ---
 
+
 ## Coding environment
 
 > In the following section we are interested in learning more about you local development environment. This includes
@@ -294,7 +295,13 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 12 fill here ---
+We used an arg_parser, implemented in the train_wandb.py file, inside the src/nrms_mlops folder. The code example of the argparse configuration for each experiment is the following:
+python src/nrms_ml_ops/train_wandb.py --batch_size=32 --epochs=20 --learning_rate=1e-05
+The argparser is used during the WANDB sweep, which is referenced later. During this sweep we use a config file, sweep.yaml, inside the folder configs, in which we specify the value of the hyperparameters to try. Basically we tried the following values:
+- Learning rate: 1e-5, 1e-4, 1e-3, 1e-2, 1e-1.
+- Batch size: 16, 32, 64
+- Epochs: 10, 15, 20, 25
+
 
 ### Question 13
 
@@ -309,7 +316,9 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 13 fill here ---
+When an experiment is run using the wandb training script (train_wandb.py), inside the wandb folder the experiment is registered authomatically. A folder is created, with the timestamp of the experiment as the name, as well as the identifier of the run for the wandb platform. Inside this folder the wandb infrastructure already creates a files folder, which then contains a config yaml file. Inside this yaml file we can find the value used for each hyperparameter, including as well other features, such as the system where the file has been executed. This way we can keep track of each of th experiments done. 
+Inside this folder, the weights of the model are also stored, in a .h5 file. We can also check the logging output of each case, seeing the evolution of the training and other logging events we added. Then, in the WANDB platform we can further analyze the results.
+To reproduce the experiment, one would have to call the train_wandb.py file, and include the hyperparameters specified in the config file, passing them as argparse arguments, as specified in the previous question. 
 
 ### Question 14
 

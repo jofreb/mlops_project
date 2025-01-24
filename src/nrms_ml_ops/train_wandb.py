@@ -216,32 +216,10 @@ tr_loss = hist.history['loss'][-1]
 gc.collect()
 
 
-# logger.debug("Saving model")
+
 model.model.save_weights(MODEL_WEIGHTS+"nrms.weights.h5")
 
-# artifact = wandb.Artifact(
-#         name="nrms_model",
-#         type="model",
-#         description="A model trained to predict which articles a user will click on",
-#         metadata={"validation_AUC": val_auc, "training_AUC": tr_auc, "validation_loss": val_loss, "training_loss": tr_loss},
-#     )
-# artifact.add_file(MODEL_WEIGHTS+"nrms.weights.h5")
-# wandb.log_artifact(artifact)
-
-# model.model.save(MODEL_WEIGHTS + "nrms_model", save_format="tf")  # Saves in SavedModel format
-# artifact = wandb.Artifact(
-#     name="nrms_model",
-#     type="model",
-#     description="A model trained to predict which articles a user will click on for model registry",
-#     metadata={
-#         "validation_AUC": val_auc,
-#         "training_AUC": tr_auc,
-#         "validation_loss": val_loss,
-#         "training_loss": tr_loss,
-#     },
-# )
-# artifact.add_dir(MODEL_WEIGHTS + "nrms_model")
-# wandb.log_artifact(artifact)
+model.model.save(MODEL_WEIGHTS + "nrms_model", save_format="tf")  # Saves in SavedModel format
 
 
 weights_artifact = wandb.Artifact(
@@ -251,8 +229,8 @@ weights_artifact = wandb.Artifact(
 )
 weights_artifact.add_file(MODEL_WEIGHTS+"nrms.weights.h5")
 wandb.log_artifact(weights_artifact)
-# run.log_artifact(artifact)
 
-# token wandb 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
+
+
 
 logger.debug("Correctly ended")
