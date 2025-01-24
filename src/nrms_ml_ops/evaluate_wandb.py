@@ -1,14 +1,10 @@
-from transformers import AutoTokenizer, AutoModel
 from pathlib import Path
 import tensorflow as tf
 import datetime as dt
 import polars as pl
 import gc
 import os
-from pathlib import Path
-import sys
 import numpy as np
-import yaml
 
 
 from utils._constants import (
@@ -16,36 +12,20 @@ from utils._constants import (
     DEFAULT_CLICKED_ARTICLES_COL,
     DEFAULT_INVIEW_ARTICLES_COL,
     DEFAULT_IMPRESSION_ID_COL,
-    DEFAULT_SUBTITLE_COL,
-    DEFAULT_LABELS_COL,
-    DEFAULT_TITLE_COL,
     DEFAULT_USER_COL,
-    DEFAULT_IMPRESSION_TIMESTAMP_COL,
 )
 
 from utils._behaviors import (
-    create_binary_labels_column,
-    sampling_strategy_wu2019,
-    add_known_user_column,
     add_prediction_scores,
-    truncate_history,
 )
-from evaluation import MetricEvaluator, AucScore, NdcgScore, MrrScore
-from utils._articles import convert_text2encoding_with_transformers
-from utils._polars import concat_str_columns, slice_join_dataframes
+from evaluation import AucScore
 from utils._articles import create_article_id_to_value_mapping
-from utils._nlp import get_transformers_word_embeddings
-from utils._python import write_submission_file, rank_predictions_by_score
-from layers import AttLayer2, SelfAttention
 
 from dataloader import NRMSDataLoader
 from model_config import hparams_nrms
 from model import NRMSModel_docvec
 
-from typing import List, Dict, Any, Tuple, Optional, Union
-from datetime import datetime, timedelta
 
-import wandb
 # run = wandb.init()
 # artifact = run.use_artifact('jofreb-danmarks-tekniske-universitet-dtu/nrms_mlops/nrms_model_weights:v0', type='model-weights')
 # artifact_dir = artifact.download("./models/wandb")
