@@ -497,7 +497,8 @@ We managed to write an API for our model using *FastAPI* and containerized it us
 >
 > Answer:
 
---- question 24 fill here ---
+We packed our API application into a Docker image and uploaded it to Google Artifact Registry, preparing it for cloud deployment. While we didn't run the API directly from a cloud-hosted instance, some of the needed steps to performe an actual deployment were achieved. However, we could test the API created locally to ensure that the model loaded correctly and accurately predicted the AUC for the data that the user imported. This setup ensured us that the API could be hosted on a cloud instance but a properly frontend could be useful. To invoke the service, we mainly used the default UI from FastAPI where we could upload the parquet data and then, the API gave back the resulting AUC. Moreover, it could be done through the terminal using the `/predict/` endpoint thanks to the command: `curl -X POST -F "file=path/to/the/ptest.parquet" http://127.0.0.1:8000/predict/`
+
 
 ### Question 25
 
