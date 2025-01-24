@@ -88,7 +88,7 @@ will check the repositories and the code to verify your answers.
 * [ ] Deploy your model in GCP using either Functions or Run as the backend (M23) **Adri**
 * [x] Write API tests for your application and setup continues integration for these (M24) **Paula**
 * [ ] Load test your application (M24)
-* [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25) **Jofre**
+* [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
 * [ ] Create a frontend for your API (M26)
 
 ### Week 3
@@ -578,8 +578,14 @@ We did not add anything extra.
 >
 > Answer:
 
-Our final system would have the following structure. The starting point of our the diagram is a base model which we implemented locally with some local logging. Then we have a module that implements a wandb thorough search for obtaining the optimal hyperparameters. This optimal model, is then created a docker image of the model. This docker image is on the Cloud. Then the container is executed through a Vertex AI,leveraging the data on cloud storage. The image is quite similar to the one provided it, hence that we didn't change it. 
-[this figure](figures/overview.png)
+Our final system is designed with a robust and structured workflow to ensure seamless development, optimization, deployment, and execution of our model. At its core, the process begins with a base model implemented locally. This initial implementation allows us to test the foundational architecture of the model and perform basic evaluations while leveraging local logging for debugging and tracking progress.
+
+To optimize the model, we utilize a dedicated module that performs an extensive hyperparameter search powered by Weights & Biases (wandb). This ensures we systematically identify the optimal set of hyperparameters, leading to an enhanced and fine-tuned model. Once the optimal version of the model is identified, we package it into a Docker container, creating a portable and reproducible image that can be deployed across environments without dependency issues.
+
+This Docker image is then uploaded to the Cloud, ensuring scalability and accessibility. The containerized model is executed using Google Cloud’s Vertex AI, a platform that facilitates streamlined machine learning workflows. Vertex AI integrates seamlessly with cloud storage, enabling efficient data retrieval and processing. While the diagram of this system resembles a prior version, no significant modifications were made to its structure. This framework ensures an end-to-end, cloud-first approach for model development and deployment.
+![image](https://github.com/user-attachments/assets/14427311-bc48-4e6c-a200-1afc1c122edd)
+
+
 
 ### Question 30
 
