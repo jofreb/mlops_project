@@ -54,7 +54,7 @@ will check the repositories and the code to verify your answers.
 * [x] Create the initial file structure using cookiecutter with an appropriate template (M6)
 * [x] Fill out the `data.py` file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)
 * [x] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
-* [ ] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
+* [x] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
     are using (M2+M6)
 * [x] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
 * [ ] Do a bit of code typing and remember to document essential parts of your code (M7)
@@ -84,9 +84,9 @@ will check the repositories and the code to verify your answers.
 * [X] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21) **Adri**
 * [x] Create a trigger workflow for automatically building your docker images (M21) **Paula**
 * [ ] Get your model training in GCP using either the Engine or Vertex AI (M21) **Adri**
-* [ ] Create a FastAPI application that can do inference using your model (M22) **Paula**
+* [x] Create a FastAPI application that can do inference using your model (M22) **Paula**
 * [ ] Deploy your model in GCP using either Functions or Run as the backend (M23) **Adri**
-* [ ] Write API tests for your application and setup continues integration for these (M24) **Edgar**
+* [x] Write API tests for your application and setup continues integration for these (M24) **Paula**
 * [ ] Load test your application (M24)
 * [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25) **Jofre**
 * [ ] Create a frontend for your API (M26)
@@ -341,7 +341,10 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 15 fill here ---
+To run our experiments, Docker was essential for creating containerized environments, ensuring consistency and reproducibility. We developed Docker images for both the training and evaluation stages. For running the training Docker image, we used Docker Compose to simplify the management of multi-container setups and automate the build and execution processes. This allowed us to define and run the training pipeline with a single configuration file, ensuring seamless orchestration. The following commands were used:
+`docker-compose build train` 
+`docker-compose up train`  
+The key advantage of using Docker images is that each one contains all the necessary dependencies, libraries, and configurations, ensuring uniformity across project executions. The train Dockerfile encapsulates the environment setup, providing a standardized and reproducible workflow for experimentation.
 
 ### Question 16
 
