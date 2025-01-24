@@ -1,9 +1,6 @@
-import json
 from contextlib import asynccontextmanager
 from pathlib import Path
-import os
 import gc
-import datetime as dt
 
 import anyio
 import tensorflow as tf
@@ -12,10 +9,6 @@ from fastapi import FastAPI, HTTPException, File, UploadFile
 
 from utils._constants import (
     DEFAULT_HISTORY_ARTICLE_ID_COL,
-    DEFAULT_CLICKED_ARTICLES_COL,
-    DEFAULT_INVIEW_ARTICLES_COL,
-    DEFAULT_IMPRESSION_ID_COL,
-    DEFAULT_USER_COL,
 )
 from utils._behaviors import add_prediction_scores
 from utils._articles import create_article_id_to_value_mapping
@@ -37,6 +30,7 @@ HISTORY_SIZE = 35
 MODEL = None
 ARTICLE_MAPPING = None
 TEST_DATALOADER = None
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -106,12 +100,15 @@ async def lifespan(app: FastAPI):
     del ARTICLE_MAPPING
     del TEST_DATALOADER
 
+
 app = FastAPI(lifespan=lifespan)
+
 
 @app.get("/")
 async def root():
     """Root endpoint."""
     return {"message": "Welcome to the NRMS prediction API!"}
+
 
 @app.post("/predict/")
 async def predict_behavior(file: UploadFile = File(...)):
@@ -123,11 +120,11 @@ async def predict_behavior(file: UploadFile = File(...)):
 
         # Define the temporary file path
         temp_file_path = Path(f"/tmp/{file.filename}")
-        
+
         # Write the file contents to disk
         async with await anyio.open_file(temp_file_path, "wb") as f:
             await f.write(contents)  # Use 'await' here to properly write contents
-        
+
         # Check if the saved file is valid
         print(f"File size: {temp_file_path.stat().st_size}")
         if temp_file_path.stat().st_size < 12:
