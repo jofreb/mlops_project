@@ -12,7 +12,7 @@ def test_dataset_dimensions():
     """Test that the dataset has the correct dimensions."""
     #path_data = Path(_PATH_DATA)
     
-    path_data = _PATH_DATA
+    #path_data = _PATH_DATA
     train = pl.read_parquet(os.path.join(_PATH_DATA, "train.parquet"))
     #train = pl.read_parquet(path_data.joinpath("train.parquet"))
     test = pl.read_parquet(os.path.join(_PATH_DATA,"test.parquet"))

@@ -8,6 +8,8 @@ import os
 import numpy as np
 import argparse
 
+from tests import _PATH_DATA
+
 
 from src.nrms_ml_ops.utils._constants import (
     DEFAULT_HISTORY_ARTICLE_ID_COL,
@@ -70,9 +72,9 @@ COLUMNS = [
 ]
 
 
-df_test = pl.read_parquet(PATH.joinpath("test.parquet"))
+df_test = pl.read_parquet(os.path.join(_PATH_DATA,"test.parquet"))
 
-df_articles = pl.read_parquet(PATH.joinpath("articles.parquet"))
+df_articles = pl.read_parquet(os.path.join(_PATH_DATA,"articles.parquet"))
 
 precomputed_embeddings = pl.read_parquet(PATH.joinpath(embedding + ".parquet"))
 
@@ -144,7 +146,7 @@ def test_model_prediction():
     print("loading model...")
     model.model.load_weights(str(MODEL_WEIGHTS))
     
-    df_test = pl.read_parquet(PATH.joinpath("test.parquet"))
+    df_test = pl.read_parquet(os.path.join(_PATH_DATA,"test.parquet"))
 
     pred_test = model.scorer.predict(test_dataloader)
     df_test = add_prediction_scores(df_test, pred_test.tolist())
