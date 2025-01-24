@@ -1,6 +1,6 @@
-from utils._python import create_lookup_dict
+from src.nrms_ml_ops.utils._python import create_lookup_dict
 import polars as pl
-from utils._constants import DEFAULT_ARTICLE_ID_COL
+from src.nrms_ml_ops.utils._constants import DEFAULT_ARTICLE_ID_COL
 
 try:
     from transformers import AutoTokenizer
