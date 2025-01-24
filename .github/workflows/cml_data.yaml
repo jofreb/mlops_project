@@ -48,3 +48,8 @@ jobs:
     - name: Check data statistics
       run: |
         python src/nrms_ml_ops/dataset_statistics.py "gs://project_mlops_bucket/data/processed/"
+
+    - name: Set GCP credentials
+      run: echo "${{ secrets.GCP_SA_KEY }}" > /credentials.json
+      shell: bash
+      

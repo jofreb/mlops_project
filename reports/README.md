@@ -82,7 +82,7 @@ will check the repositories and the code to verify your answers.
 * [X] Add a continues workflow that triggers when data changes (M19) **Adri**
 * [ ] Add a continues workflow that triggers when changes to the model registry is made (M19) **Jofre**
 * [X] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21) **Adri**
-* [ ] Create a trigger workflow for automatically building your docker images (M21) **Paula**
+* [x] Create a trigger workflow for automatically building your docker images (M21) **Paula**
 * [ ] Get your model training in GCP using either the Engine or Vertex AI (M21) **Adri**
 * [ ] Create a FastAPI application that can do inference using your model (M22) **Paula**
 * [ ] Deploy your model in GCP using either Functions or Run as the backend (M23) **Adri**
