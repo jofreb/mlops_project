@@ -26,6 +26,7 @@ from model import NRMSModel_docvec
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 tf.config.optimizer.set_jit(False)
 
+
 def evaluate_model(model_weights_path, df_test_path):
     MODEL_WEIGHTS = Path(model_weights_path).expanduser()
 
@@ -112,6 +113,7 @@ def evaluate_model(model_weights_path, df_test_path):
 
     print(f"Test AUC: {auc}")
 
+
 # Example usage:
 # evaluate_model("./models/NRMS-2025-01-16 19:02:02.391836nrms.weights.h5", "./data/processed/test.parquet")
 
@@ -120,7 +122,7 @@ if __name__ == "__main__":
     parser.add_argument("model_weights_path", type=str, help="Path to the model weights file")
     parser.add_argument("df_test_path", type=str, help="Path to the test dataframe file")
     args = parser.parse_args()
-    
+
     PATH = Path("./data/processed").expanduser()
     model_path = "./models/NRMS-2025-01-16 19:02:02.391836nrms.weights.h5"
     df_test = pl.read_parquet(PATH.joinpath("test.parquet"))
