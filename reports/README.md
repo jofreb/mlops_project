@@ -128,7 +128,7 @@ will check the repositories and the code to verify your answers.
 > *sXXXXXX, sXXXXXX, sXXXXXX*
 >
 > Answer:
-
+s240661,
 --- question 2 fill here ---
 
 ### Question 3
@@ -276,7 +276,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 11 fill here ---
+Regarding the wandb framework, we added a workflow that is triggered from wandb whenever there is a change in the model-weights uploaded in the platform. This workflow is defined in the file workflow_wandb.yaml. In short terms, the workflow provides as an output the information relative to the modification of the weights in wandb.
 
 ## Running code and tracking experiments
 
